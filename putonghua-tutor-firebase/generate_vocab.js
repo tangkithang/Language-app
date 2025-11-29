@@ -1,0 +1,213 @@
+import { pinyin } from 'pinyin-pro';
+import fs from 'fs';
+
+// Helper to create token
+const createToken = (word, overridePinyin = null) => {
+    const py = overridePinyin || pinyin(word);
+    return { hanzi: word, pinyin: py };
+};
+
+// Helper to create sentence (single word for vocab)
+const createItem = (word, overridePinyin = null) => {
+    // Add a comma to the original text to create a pause in TTS
+    // We add it as a separate token so the highlighter stays in sync
+    return {
+        id: Math.random().toString(36).substr(2, 9),
+        original: word + "，",
+        tokens: [
+            createToken(word, overridePinyin),
+            { hanzi: "，", pinyin: "" } // Silent punctuation token
+        ]
+    };
+};
+
+const VOCAB_STRUCTURE = [
+    {
+        title: "Part 1: Pronunciation Focus (語音針對性練習)",
+        units: [
+            {
+                title: "1. Front/Back Nasal & Tones (前後鼻音與聲調)",
+                items: [
+                    // Front Nasal
+                    "適應", "行程", "平常", "晚上", "上網", "環境", "成本", "一定", "當然", "研究生",
+                    // Tones
+                    "研究", "畢業", "金錢", "攢錢", "省錢", "賺錢", "掙錢", "有錢", "要錢", "花錢", "促銷", "教室", "教小朋友", "教育"
+                ]
+            },
+            {
+                title: "2. Initials (聲母辨析)",
+                items: [
+                    // x - s/sh
+                    "想像", "利息", "時薪", "性格", "介紹", "燒烤", "大廈", "不少", "不小", "上來", "下來", "消費",
+                    // h - f
+                    "花費", "吃飯",
+                    // h - k
+                    "況且", "有空兒", "速食", "壞餐",
+                    // h - w
+                    "為了", "位於", "惠"
+                ]
+            },
+            {
+                title: "3. Finals (韻母辨析)",
+                items: [
+                    "賺錢", "撞錢", "都市", "要", "有", "肉", "樓"
+                ]
+            },
+            {
+                title: "4. Neutral Tone (輕聲詞)",
+                items: [
+                    // Explicitly define neutral tones (5 or no tone mark)
+                    { word: "清楚", pinyin: "qīng chu" },
+                    { word: "先生", pinyin: "xiān sheng" },
+                    { word: "東西", pinyin: "dōng xi" },
+                    { word: "關係", pinyin: "guān xi" },
+                    { word: "生意", pinyin: "shēng yi" },
+                    { word: "衣服", pinyin: "yī fu" },
+                    { word: "商量", pinyin: "shāng liang" },
+                    { word: "知識", pinyin: "zhī shi" },
+
+                    { word: "什麼", pinyin: "shén me" },
+                    { word: "麻煩", pinyin: "má fan" },
+                    { word: "名字", pinyin: "míng zi" },
+                    { word: "孩子", pinyin: "hái zi" },
+                    { word: "朋友", pinyin: "péng you" },
+                    { word: "便宜", pinyin: "pián yi" },
+                    { word: "除了", pinyin: "chú le" },
+                    { word: "時候", pinyin: "shí hou" },
+
+                    { word: "謝謝", pinyin: "xiè xie" },
+                    { word: "告訴", pinyin: "gào su" },
+                    { word: "愛人", pinyin: "ài ren" },
+                    { word: "太太", pinyin: "tài tai" },
+                    { word: "客氣", pinyin: "kè qi" },
+                    { word: "地方", pinyin: "dì fang" },
+                    { word: "漂亮", pinyin: "piào liang" },
+                    { word: "意思", pinyin: "yì si" },
+
+                    { word: "喜歡", pinyin: "xǐ huan" },
+                    { word: "怎麼", pinyin: "zěn me" },
+                    { word: "打算", pinyin: "dǎ suan" },
+                    { word: "打聽", pinyin: "dǎ ting" },
+                    { word: "我們", pinyin: "wǒ men" },
+                    { word: "你們", pinyin: "nǐ men" },
+                    { word: "他們", pinyin: "tā men" },
+                    { word: "人們", pinyin: "rén men" }
+                ]
+            }
+        ]
+    },
+    {
+        title: "Part 2: Common Mistakes & Polyphones (易錯詞與多音字)",
+        units: [
+            {
+                title: "1. Polyphones (重點多音字)",
+                items: [
+                    { word: "處理", pinyin: "chǔ lǐ" },
+                    { word: "因為", pinyin: "yīn wèi" },
+                    { word: "空餘", pinyin: "kòng yú" },
+                    { word: "幾場", pinyin: "jǐ chǎng" },
+                    { word: "即使", pinyin: "jí shǐ" },
+                    { word: "什麼", pinyin: "shén me" },
+                    { word: "晚上", pinyin: "wǎn shang" },
+                    { word: "這麼", pinyin: "zhè me" },
+                    { word: "朋友", pinyin: "péng you" },
+                    { word: "氣氛", pinyin: "qì fēn" },
+                    { word: "滂沱", pinyin: "pāng tuó" },
+                    { word: "負債累累", pinyin: "fù zhài lěi lěi" },
+                    { word: "碩果累累", pinyin: "shuò guǒ léi léi" },
+                    { word: "複雜", pinyin: "fù zá" },
+                    { word: "影片", pinyin: "yǐng piàn" },
+                    { word: "影片兒", pinyin: "yǐng piānr" },
+                    { word: "血壓", pinyin: "xuè yā" },
+                    { word: "鮮血", pinyin: "xiān xuè" },
+                    { word: "血液", pinyin: "xuè yè" },
+                    { word: "一針見血", pinyin: "yì zhēn jiàn xiě" },
+                    { word: "暈血", pinyin: "yùn xiě" },
+                    { word: "出血", pinyin: "chū xiě" },
+                    { word: "血淋淋", pinyin: "xiě lín lín" }
+                ]
+            },
+            {
+                title: "2. Common Vocabulary (易錯詞彙表)",
+                items: [
+                    // Group 1
+                    "祈禱", "盡情", "同鄉", "便宜", "東西", "刁難", "功夫", "寧可", "輕舉妄動", "軟件",
+                    // Group 2
+                    "網絡", "觸碰", "摁", "鍵盤", "處理", "溝通", "檔案", "容易", "會計師", "連鎖",
+                    // Group 3
+                    "行情", "不在行", "人行道", "沒數", "數以億計", "通脹", "志願", "經營",
+                    // Group 4
+                    "產品", "基礎", "長久", "粗糙", "言傳身教", "存儲", "財富", "操作",
+                    // Group 5
+                    "準備", "準確", "資料", "資訊", "投資", "資格", "總是", "總之", "種類", "質量", "註冊",
+                    // Group 6
+                    "雜誌社", "紮實", "積累", "積分", "成績", "執行", "計劃", "增加", "專業知識", "賺錢",
+                    // Group 7
+                    "守著", "理所當然", "模式", "減省", "周詳", "省市", "喪失", "住宿費", "公司", "創業"
+                ]
+            }
+        ]
+    }
+];
+
+const generateData = () => {
+    const courses = VOCAB_STRUCTURE.map((part, partIdx) => {
+        return {
+            id: `part-${partIdx + 1}`,
+            title: part.title,
+            chapters: part.units.map((unit, unitIdx) => {
+                const sentences = unit.items.map(item => {
+                    if (typeof item === 'string') {
+                        return createItem(item);
+                    } else {
+                        return createItem(item.word, item.pinyin);
+                    }
+                });
+
+                // Split into chunks of 10 if needed, but for now keep as one section per unit
+                // The user asked for "learning chapters in groups of 10 vocabs or less"
+                // So let's split sentences into chunks
+                const chunks = [];
+                for (let i = 0; i < sentences.length; i += 10) {
+                    chunks.push(sentences.slice(i, i + 10));
+                }
+
+                return chunks.map((chunk, chunkIdx) => ({
+                    id: `unit-${partIdx + 1}-${unitIdx + 1}-${chunkIdx + 1}`,
+                    title: `${unit.title} ${chunks.length > 1 ? `(Part ${chunkIdx + 1})` : ''}`,
+                    content: {
+                        title: `${unit.title} ${chunks.length > 1 ? `(${chunkIdx + 1})` : ''}`,
+                        sections: [
+                            {
+                                speaker: "Vocabulary Practice",
+                                sentences: chunk
+                            }
+                        ]
+                    }
+                }));
+            }).flat()
+        };
+    });
+
+    const fileContent = `import type { AnalysisResult } from '../types';
+
+export interface Chapter {
+    id: string;
+    title: string;
+    content: AnalysisResult;
+}
+
+export interface CoursePart {
+    id: string;
+    title: string;
+    chapters: Chapter[];
+}
+
+export const VOCAB_COURSE: CoursePart[] = ${JSON.stringify(courses, null, 4)};
+`;
+
+    fs.writeFileSync('src/data/vocabularyData.ts', fileContent);
+    console.log('Vocabulary data generated!');
+};
+
+generateData();
