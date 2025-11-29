@@ -3,7 +3,7 @@ import { Reader } from './components/Reader';
 import { Dashboard } from './components/Dashboard';
 import { VocabularyMenu } from './components/VocabularyMenu';
 import { PRACTICE_DATA, AZURE_CONFIG } from './constants';
-import { Key, Settings, X } from 'lucide-react';
+import { Key, Settings, X, Star } from 'lucide-react';
 import type { Chapter } from './data/vocabularyData';
 
 type AppMode = 'HOME' | 'READING' | 'VOCAB' | 'EXAM';
@@ -54,9 +54,38 @@ export default function App() {
     setActiveChapter(chapter);
   };
 
+  // Gamification State
+  // Gamification State
+  const [xp, setXp] = useState(0);
+  const [chapterScores, setChapterScores] = useState<Record<string, number>>({});
+  const [readingScore, setReadingScore] = useState<number>(0);
+
+  const handleSessionComplete = (score: number, chapterId?: string) => {
+    // XP Logic: Score * 1 (was * 10, which was too high)
+    // Only award XP if score >= 50
+    const earnedXp = score >= 50 ? Math.round(score) : 0;
+    setXp(prev => prev + earnedXp);
+
+    // Update Chapter Score if it's a vocab chapter
+    if (chapterId) {
+      setChapterScores(prev => ({
+        ...prev,
+        [chapterId]: Math.max(prev[chapterId] || 0, score)
+      }));
+    } else {
+      // It's a reading session
+      setReadingScore(prev => Math.max(prev, score));
+    }
+  };
+
   const renderContent = () => {
     if (mode === 'HOME') {
-      return <Dashboard onSelectMode={setMode} username={username} />;
+      return <Dashboard
+        onSelectMode={setMode}
+        username={username}
+        chapterScores={chapterScores}
+        readingScore={readingScore}
+      />;
     }
 
     if (mode === 'READING') {
@@ -71,6 +100,7 @@ export default function App() {
             serviceRegion={AZURE_CONFIG.region}
             selectedMicId={selectedMicId}
             mode="reading"
+            onComplete={(score) => handleSessionComplete(score)}
           />
         </div>
       );
@@ -89,11 +119,16 @@ export default function App() {
               serviceRegion={AZURE_CONFIG.region}
               selectedMicId={selectedMicId}
               mode="vocab"
+              onComplete={(score) => handleSessionComplete(score, activeChapter.id)}
             />
           </div>
         );
       }
-      return <VocabularyMenu onSelectChapter={handleSelectChapter} onBack={() => setMode('HOME')} />;
+      return <VocabularyMenu
+        onSelectChapter={handleSelectChapter}
+        onBack={() => setMode('HOME')}
+        scores={chapterScores}
+      />;
     }
 
     if (mode === 'EXAM') {
@@ -123,6 +158,10 @@ export default function App() {
               <span className="font-bold text-lg md:hidden font-serif-sc">文淵</span>
             </div>
             <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2 bg-yellow-100 px-3 py-1.5 rounded-full text-yellow-700 font-bold text-sm border border-yellow-200 shadow-sm">
+                <Star className="fill-current" size={16} />
+                <span>{xp} XP</span>
+              </div>
               <button
                 onClick={() => setShowSettings(true)}
                 className="p-2 rounded-full hover:bg-stone-100 text-stone-500 transition-colors"

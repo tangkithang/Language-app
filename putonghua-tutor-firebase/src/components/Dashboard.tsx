@@ -1,22 +1,76 @@
 import React from 'react';
-import { BookOpen, Library, GraduationCap, Star } from 'lucide-react';
+import { BookOpen, Library, GraduationCap } from 'lucide-react';
 
 interface DashboardProps {
     onSelectMode: (mode: 'READING' | 'VOCAB' | 'EXAM') => void;
     username: string;
+    chapterScores: Record<string, number>;
+    readingScore: number;
 }
 
-export const Dashboard: React.FC<DashboardProps> = ({ onSelectMode, username }) => {
+export const Dashboard: React.FC<DashboardProps> = ({ onSelectMode, username, chapterScores, readingScore }) => {
+    // Calculate progress for each section
+
+    // Reading: 1 passage so far. If score > 0, it's "started/completed"
+    // For now, let's just show score as progress if > 0, or 100% if > 80?
+    // Let's just map score to percentage directly for single item
+    const readingProgress = readingScore > 0 ? Math.min(100, Math.round(readingScore)) : 0;
+
+    // Vocab: Percentage of chapters completed (score > 0)
+    const totalChapters = 20; // Approximate
+    const completedChapters = Object.keys(chapterScores).length;
+    const vocabProgress = Math.min(100, Math.round((completedChapters / totalChapters) * 100));
+
+    // Exam: 0%
+    const examProgress = 0;
+
+    const renderSpeedometer = (percentage: number, label: string, colorClass: string) => (
+        <div className="flex flex-col items-center gap-2">
+            <div className="w-16 h-16 relative flex items-center justify-center">
+                <svg className="w-full h-full transform -rotate-90">
+                    <circle
+                        cx="32"
+                        cy="32"
+                        r="28"
+                        stroke="currentColor"
+                        strokeWidth="6"
+                        fill="transparent"
+                        className="text-stone-100"
+                    />
+                    <circle
+                        cx="32"
+                        cy="32"
+                        r="28"
+                        stroke="currentColor"
+                        strokeWidth="6"
+                        fill="transparent"
+                        strokeDasharray={175.93}
+                        strokeDashoffset={175.93 - (percentage / 100) * 175.93}
+                        className={`${colorClass} transition-all duration-1000 ease-out`}
+                        strokeLinecap="round"
+                    />
+                </svg>
+                <div className="absolute inset-0 flex items-center justify-center">
+                    <span className="text-xs font-bold text-stone-700">{percentage}%</span>
+                </div>
+            </div>
+            <span className="text-[10px] font-bold text-stone-400 uppercase tracking-wider">{label}</span>
+        </div>
+    );
+
     return (
         <div className="max-w-4xl mx-auto p-6">
-            <div className="flex justify-between items-center mb-8">
-                <div>
+            <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-6">
+                <div className="text-center md:text-left">
                     <h1 className="text-2xl font-bold text-stone-800">Welcome back, {username}!</h1>
                     <p className="text-stone-500">Ready to continue your mastery path?</p>
                 </div>
-                <div className="flex items-center gap-2 bg-yellow-100 px-4 py-2 rounded-full text-yellow-700 font-bold">
-                    <Star className="fill-current" size={20} />
-                    <span>0 XP</span>
+
+                {/* Speedometers */}
+                <div className="flex items-center gap-6">
+                    {renderSpeedometer(readingProgress, "Reading", "text-indigo-600")}
+                    {renderSpeedometer(vocabProgress, "Vocab", "text-emerald-600")}
+                    {renderSpeedometer(examProgress, "Exam", "text-amber-600")}
                 </div>
             </div>
 

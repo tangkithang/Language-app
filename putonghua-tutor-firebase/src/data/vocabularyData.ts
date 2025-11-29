@@ -33,10 +33,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "適應",
                                             "pinyin": "shì yīng"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -47,10 +43,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "行程",
                                             "pinyin": "xíng chéng"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -61,10 +53,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "平常",
                                             "pinyin": "píng cháng"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -75,10 +63,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "晚上",
                                             "pinyin": "wǎn shàng"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -89,10 +73,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "上網",
                                             "pinyin": "shàng wǎng"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -103,10 +83,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "環境",
                                             "pinyin": "huán jìng"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -117,10 +93,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "成本",
                                             "pinyin": "chéng běn"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -131,10 +103,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "一定",
                                             "pinyin": "yí dìng"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -145,10 +113,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "當然",
                                             "pinyin": "dāng rán"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -159,10 +123,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "研究生",
                                             "pinyin": "yán jiū shēng"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 }
@@ -187,10 +147,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "研究",
                                             "pinyin": "yán jiū"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -201,10 +157,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "畢業",
                                             "pinyin": "bì yè"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -215,10 +167,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "金錢",
                                             "pinyin": "jīn qián"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -229,10 +177,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "攢錢",
                                             "pinyin": "zǎn qián"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -243,10 +187,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "省錢",
                                             "pinyin": "shěng qián"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -257,10 +197,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "賺錢",
                                             "pinyin": "zhuàn qián"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -271,10 +207,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "掙錢",
                                             "pinyin": "zhēng qián"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -285,10 +217,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "有錢",
                                             "pinyin": "yǒu qián"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -299,10 +227,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "要錢",
                                             "pinyin": "yào qián"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -313,10 +237,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "花錢",
                                             "pinyin": "huā qián"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 }
@@ -341,10 +261,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "促銷",
                                             "pinyin": "cù xiāo"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -355,10 +271,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "教室",
                                             "pinyin": "jiào shì"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -369,10 +281,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "教小朋友",
                                             "pinyin": "jiào xiǎo péng yǒu"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -383,10 +291,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "教育",
                                             "pinyin": "jiào yù"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 }
@@ -411,10 +315,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "想像",
                                             "pinyin": "xiǎng xiàng"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -425,10 +325,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "利息",
                                             "pinyin": "lì xī"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -439,10 +335,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "時薪",
                                             "pinyin": "shí xīn"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -453,10 +345,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "性格",
                                             "pinyin": "xìng gé"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -467,10 +355,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "介紹",
                                             "pinyin": "jiè shào"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -481,10 +365,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "燒烤",
                                             "pinyin": "shāo kǎo"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -495,10 +375,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "大廈",
                                             "pinyin": "dà shà"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -509,10 +385,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "不少",
                                             "pinyin": "bù shǎo"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -523,10 +395,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "不小",
                                             "pinyin": "bù xiǎo"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -537,10 +405,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "上來",
                                             "pinyin": "shàng lái"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 }
@@ -565,10 +429,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "下來",
                                             "pinyin": "xià lái"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -579,10 +439,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "消費",
                                             "pinyin": "xiāo fèi"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -593,10 +449,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "花費",
                                             "pinyin": "huā fèi"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -607,10 +459,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "吃飯",
                                             "pinyin": "chī fàn"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -621,10 +469,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "況且",
                                             "pinyin": "kuàng qiě"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -635,10 +479,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "有空兒",
                                             "pinyin": "yǒu kōng ér"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -649,10 +489,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "速食",
                                             "pinyin": "sù shí"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -663,10 +499,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "壞餐",
                                             "pinyin": "huài cān"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -677,10 +509,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "為了",
                                             "pinyin": "wéi le"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -691,10 +519,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "位於",
                                             "pinyin": "wèi wū"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 }
@@ -719,10 +543,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "惠",
                                             "pinyin": "huì"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 }
@@ -747,10 +567,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "賺錢",
                                             "pinyin": "zhuàn qián"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -761,10 +577,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "撞錢",
                                             "pinyin": "zhuàng qián"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -775,10 +587,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "都市",
                                             "pinyin": "dū shì"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -789,10 +597,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "要",
                                             "pinyin": "yào"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -803,10 +607,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "有",
                                             "pinyin": "yǒu"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -817,10 +617,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "肉",
                                             "pinyin": "ròu"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -831,10 +627,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "樓",
                                             "pinyin": "lóu"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 }
@@ -859,10 +651,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "清楚",
                                             "pinyin": "qīng chu"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -873,10 +661,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "先生",
                                             "pinyin": "xiān sheng"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -887,10 +671,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "東西",
                                             "pinyin": "dōng xi"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -901,10 +681,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "關係",
                                             "pinyin": "guān xi"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -915,10 +691,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "生意",
                                             "pinyin": "shēng yi"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -929,10 +701,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "衣服",
                                             "pinyin": "yī fu"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -943,10 +711,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "商量",
                                             "pinyin": "shāng liang"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -957,10 +721,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "知識",
                                             "pinyin": "zhī shi"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -971,10 +731,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "什麼",
                                             "pinyin": "shén me"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -985,10 +741,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "麻煩",
                                             "pinyin": "má fan"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 }
@@ -1013,10 +765,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "名字",
                                             "pinyin": "míng zi"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -1027,10 +775,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "孩子",
                                             "pinyin": "hái zi"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -1041,10 +785,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "朋友",
                                             "pinyin": "péng you"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -1055,10 +795,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "便宜",
                                             "pinyin": "pián yi"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -1069,10 +805,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "除了",
                                             "pinyin": "chú le"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -1083,10 +815,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "時候",
                                             "pinyin": "shí hou"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -1097,10 +825,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "謝謝",
                                             "pinyin": "xiè xie"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -1111,10 +835,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "告訴",
                                             "pinyin": "gào su"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -1125,10 +845,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "愛人",
                                             "pinyin": "ài ren"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -1139,10 +855,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "太太",
                                             "pinyin": "tài tai"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 }
@@ -1167,10 +879,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "客氣",
                                             "pinyin": "kè qi"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -1181,10 +889,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "地方",
                                             "pinyin": "dì fang"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -1195,10 +899,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "漂亮",
                                             "pinyin": "piào liang"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -1209,10 +909,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "意思",
                                             "pinyin": "yì si"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -1223,10 +919,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "喜歡",
                                             "pinyin": "xǐ huan"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -1237,10 +929,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "怎麼",
                                             "pinyin": "zěn me"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -1251,10 +939,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "打算",
                                             "pinyin": "dǎ suan"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -1265,10 +949,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "打聽",
                                             "pinyin": "dǎ ting"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -1279,10 +959,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "我們",
                                             "pinyin": "wǒ men"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -1293,10 +969,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "你們",
                                             "pinyin": "nǐ men"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 }
@@ -1321,10 +993,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "他們",
                                             "pinyin": "tā men"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -1335,10 +1003,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "人們",
                                             "pinyin": "rén men"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 }
@@ -1369,10 +1033,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "處理",
                                             "pinyin": "chǔ lǐ"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -1383,10 +1043,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "因為",
                                             "pinyin": "yīn wèi"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -1397,10 +1053,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "空餘",
                                             "pinyin": "kòng yú"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -1411,10 +1063,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "幾場",
                                             "pinyin": "jǐ chǎng"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -1425,10 +1073,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "即使",
                                             "pinyin": "jí shǐ"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -1439,10 +1083,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "什麼",
                                             "pinyin": "shén me"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -1453,10 +1093,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "晚上",
                                             "pinyin": "wǎn shang"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -1467,10 +1103,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "這麼",
                                             "pinyin": "zhè me"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -1481,10 +1113,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "朋友",
                                             "pinyin": "péng you"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -1495,10 +1123,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "氣氛",
                                             "pinyin": "qì fēn"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 }
@@ -1523,10 +1147,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "滂沱",
                                             "pinyin": "pāng tuó"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -1537,10 +1157,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "負債累累",
                                             "pinyin": "fù zhài lěi lěi"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -1551,10 +1167,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "碩果累累",
                                             "pinyin": "shuò guǒ léi léi"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -1565,10 +1177,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "複雜",
                                             "pinyin": "fù zá"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -1579,10 +1187,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "影片",
                                             "pinyin": "yǐng piàn"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -1593,10 +1197,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "影片兒",
                                             "pinyin": "yǐng piānr"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -1607,10 +1207,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "血壓",
                                             "pinyin": "xuè yā"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -1621,10 +1217,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "鮮血",
                                             "pinyin": "xiān xuè"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -1635,10 +1227,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "血液",
                                             "pinyin": "xuè yè"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -1649,10 +1237,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "一針見血",
                                             "pinyin": "yì zhēn jiàn xiě"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 }
@@ -1677,10 +1261,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "暈血",
                                             "pinyin": "yùn xiě"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -1691,10 +1271,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "出血",
                                             "pinyin": "chū xiě"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -1705,10 +1281,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "血淋淋",
                                             "pinyin": "xiě lín lín"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 }
@@ -1733,10 +1305,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "祈禱",
                                             "pinyin": "qí dǎo"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -1747,10 +1315,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "盡情",
                                             "pinyin": "jìn qíng"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -1761,10 +1325,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "同鄉",
                                             "pinyin": "tóng xiāng"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -1775,10 +1335,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "便宜",
                                             "pinyin": "pián yi"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -1789,10 +1345,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "東西",
                                             "pinyin": "dōng xī"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -1803,10 +1355,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "刁難",
                                             "pinyin": "diāo nán"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -1817,10 +1365,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "功夫",
                                             "pinyin": "gōng fū"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -1831,10 +1375,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "寧可",
                                             "pinyin": "níng kě"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -1845,10 +1385,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "輕舉妄動",
                                             "pinyin": "qīng jǔ wàng dòng"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -1859,10 +1395,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "軟件",
                                             "pinyin": "ruǎn jiàn"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 }
@@ -1887,10 +1419,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "網絡",
                                             "pinyin": "wǎng luò"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -1901,10 +1429,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "觸碰",
                                             "pinyin": "chù pèng"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -1915,10 +1439,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "摁",
                                             "pinyin": "èn"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -1929,10 +1449,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "鍵盤",
                                             "pinyin": "jiàn pán"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -1943,10 +1459,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "處理",
                                             "pinyin": "chǔ lǐ"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -1957,10 +1469,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "溝通",
                                             "pinyin": "gōu tōng"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -1971,10 +1479,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "檔案",
                                             "pinyin": "dàng àn"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -1985,10 +1489,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "容易",
                                             "pinyin": "róng yì"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -1999,10 +1499,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "會計師",
                                             "pinyin": "huì jì shī"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -2013,10 +1509,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "連鎖",
                                             "pinyin": "lián suǒ"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 }
@@ -2041,10 +1533,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "行情",
                                             "pinyin": "háng qíng"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -2055,10 +1543,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "不在行",
                                             "pinyin": "bú zài háng"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -2069,10 +1553,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "人行道",
                                             "pinyin": "rén xíng dào"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -2083,10 +1563,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "沒數",
                                             "pinyin": "méi shù"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -2097,10 +1573,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "數以億計",
                                             "pinyin": "shù yǐ yì jì"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -2111,10 +1583,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "通脹",
                                             "pinyin": "tōng zhàng"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -2125,10 +1593,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "志願",
                                             "pinyin": "zhì yuàn"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -2139,10 +1603,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "經營",
                                             "pinyin": "jīng yíng"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -2153,10 +1613,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "產品",
                                             "pinyin": "chǎn pǐn"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -2167,10 +1623,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "基礎",
                                             "pinyin": "jī chǔ"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 }
@@ -2195,10 +1647,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "長久",
                                             "pinyin": "cháng jiǔ"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -2209,10 +1657,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "粗糙",
                                             "pinyin": "cū cāo"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -2223,10 +1667,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "言傳身教",
                                             "pinyin": "yán chuán shēn jiào"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -2237,10 +1677,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "存儲",
                                             "pinyin": "cún chǔ"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -2251,10 +1687,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "財富",
                                             "pinyin": "cái fù"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -2265,10 +1697,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "操作",
                                             "pinyin": "cāo zuò"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -2279,10 +1707,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "準備",
                                             "pinyin": "zhǔn bèi"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -2293,10 +1717,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "準確",
                                             "pinyin": "zhǔn què"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -2307,10 +1727,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "資料",
                                             "pinyin": "zī liào"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -2321,10 +1737,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "資訊",
                                             "pinyin": "zī xùn"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 }
@@ -2349,10 +1761,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "投資",
                                             "pinyin": "tóu zī"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -2363,10 +1771,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "資格",
                                             "pinyin": "zī gé"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -2377,10 +1781,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "總是",
                                             "pinyin": "zǒng shì"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -2391,10 +1791,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "總之",
                                             "pinyin": "zǒng zhī"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -2405,10 +1801,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "種類",
                                             "pinyin": "zhǒng lèi"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -2419,10 +1811,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "質量",
                                             "pinyin": "zhì liáng"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -2433,10 +1821,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "註冊",
                                             "pinyin": "zhù cè"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -2447,10 +1831,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "雜誌社",
                                             "pinyin": "zá zhì shè"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -2461,10 +1841,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "紮實",
                                             "pinyin": "zhā shí"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -2475,10 +1851,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "積累",
                                             "pinyin": "jī lèi"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 }
@@ -2503,10 +1875,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "積分",
                                             "pinyin": "jī fēn"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -2517,10 +1885,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "成績",
                                             "pinyin": "chéng jì"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -2531,10 +1895,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "執行",
                                             "pinyin": "zhí xíng"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -2545,10 +1905,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "計劃",
                                             "pinyin": "jì huá"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -2559,10 +1915,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "增加",
                                             "pinyin": "zēng jiā"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -2573,10 +1925,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "專業知識",
                                             "pinyin": "zhuān yè zhī shí"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -2587,10 +1935,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "賺錢",
                                             "pinyin": "zhuàn qián"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -2601,10 +1945,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "守著",
                                             "pinyin": "shǒu zhù"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -2615,10 +1955,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "理所當然",
                                             "pinyin": "lǐ suǒ dāng rán"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -2629,10 +1965,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "模式",
                                             "pinyin": "mó shì"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 }
@@ -2657,10 +1989,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "減省",
                                             "pinyin": "jiǎn shěng"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -2671,10 +1999,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "周詳",
                                             "pinyin": "zhōu xiáng"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -2685,10 +2009,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "省市",
                                             "pinyin": "shěng shì"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -2699,10 +2019,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "喪失",
                                             "pinyin": "sāng shī"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -2713,10 +2029,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "住宿費",
                                             "pinyin": "zhù sù fèi"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -2727,10 +2039,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "公司",
                                             "pinyin": "gōng sī"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 },
@@ -2741,10 +2049,6 @@ export const VOCAB_COURSE: CoursePart[] = [
                                         {
                                             "hanzi": "創業",
                                             "pinyin": "chuàng yè"
-                                        },
-                                        {
-                                            "hanzi": "，",
-                                            "pinyin": ""
                                         }
                                     ]
                                 }

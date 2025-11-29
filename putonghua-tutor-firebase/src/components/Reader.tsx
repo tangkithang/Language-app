@@ -3,7 +3,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import type { AnalysisResult, PronunciationResult } from '../types';
 import { evaluatePronunciation } from '../services/azureSpeechService';
 import { AudioVisualizer } from './AudioVisualizer';
-import { Mic, Square, Volume2, Trophy, Star, RotateCcw, AlertCircle, Loader2, BookOpen, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Mic, Square, Volume2, Trophy, RotateCcw, AlertCircle, Loader2, BookOpen, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Confetti } from './Confetti';
 
 interface ReaderProps {
@@ -12,9 +12,10 @@ interface ReaderProps {
     serviceRegion: string;
     selectedMicId: string;
     mode: 'reading' | 'vocab';
+    onComplete: (score: number) => void;
 }
 
-export const Reader: React.FC<ReaderProps> = ({ data, subscriptionKey, serviceRegion, selectedMicId, mode }) => {
+export const Reader: React.FC<ReaderProps> = ({ data, subscriptionKey, serviceRegion, selectedMicId, mode, onComplete }) => {
     // Navigation State
     const [sectionIndex, setSectionIndex] = useState(0);
 
@@ -39,7 +40,7 @@ export const Reader: React.FC<ReaderProps> = ({ data, subscriptionKey, serviceRe
     const [userAudioUrl, setUserAudioUrl] = useState<string | null>(null);
 
     // XP & Celebration State
-    const [xp, setXp] = useState(0);
+    // XP is now managed by parent
     const [showCelebration, setShowCelebration] = useState(false);
     const [xpGained, setXpGained] = useState(0);
     const [, setIsAnimatingXp] = useState(false);
@@ -211,21 +212,23 @@ export const Reader: React.FC<ReaderProps> = ({ data, subscriptionKey, serviceRe
                 setEvalResult(result);
                 setStatus('FEEDBACK');
 
-                // Calculate XP
-                if (result.score >= 60) {
+                // Calculate XP and Notify Parent
+                const score = result.score;
+                onComplete(score);
+
+                if (score >= 50) {
                     const baseXp = 10;
-                    const bonusXp = result.score >= 80 ? 5 : 0;
+                    const bonusXp = score >= 80 ? 5 : 0;
                     const totalXp = baseXp + bonusXp;
-                    setXp(prev => prev + totalXp);
                     setXpGained(totalXp);
                     setShowCelebration(true);
-
-                    // Trigger XP Animation
                     setIsAnimatingXp(true);
                     setTimeout(() => setIsAnimatingXp(false), 1000);
-
-                    // Hide celebration after 5s
                     setTimeout(() => setShowCelebration(false), 5000);
+                } else {
+                    // Low score feedback
+                    setXpGained(0);
+                    setShowCelebration(true); // Show "Try Again" modal
                 }
             } catch (e) {
                 console.error(e);
@@ -269,10 +272,7 @@ export const Reader: React.FC<ReaderProps> = ({ data, subscriptionKey, serviceRe
 
                 <div className="flex items-center gap-2">
                     {/* XP Display */}
-                    <div className="flex items-center gap-2 bg-yellow-100 px-3 py-1.5 rounded-full text-yellow-700 font-bold text-sm mr-4">
-                        <Star className="fill-current" size={16} />
-                        <span>{xp} XP</span>
-                    </div>
+                    {/* XP Display Removed from here, now in global header */}
 
                     {/* Navigation */}
                     <div className="flex items-center bg-stone-100 rounded-full p-1">
@@ -304,11 +304,22 @@ export const Reader: React.FC<ReaderProps> = ({ data, subscriptionKey, serviceRe
                         onClick={() => setShowCelebration(false)}
                     >
                         <Confetti />
-                        <div className="bg-white/90 backdrop-blur-md p-8 rounded-3xl shadow-2xl border-4 border-yellow-400 flex flex-col items-center animate-in zoom-in-50 duration-500 pointer-events-none">
-                            <Trophy className="w-24 h-24 text-yellow-500 mb-4 animate-bounce" />
-                            <h2 className="text-3xl font-black text-stone-800 mb-2">Lesson Complete!</h2>
-                            <div className="text-5xl font-black text-yellow-500 mb-2">+{xpGained} XP</div>
-                            <p className="text-stone-500 font-bold">Keep up the great work!</p>
+                        <div className={`bg-white/90 backdrop-blur-md p-8 rounded-3xl shadow-2xl border-4 ${xpGained > 0 ? 'border-yellow-400' : 'border-stone-200'} flex flex-col items-center animate-in zoom-in-50 duration-500 pointer-events-none`}>
+                            {xpGained > 0 ? (
+                                <>
+                                    <Trophy className="w-24 h-24 text-yellow-500 mb-4 animate-bounce" />
+                                    <h2 className="text-3xl font-black text-stone-800 mb-2">Lesson Complete!</h2>
+                                    <div className="text-5xl font-black text-yellow-500 mb-2">+{xpGained} XP</div>
+                                    <p className="text-stone-500 font-bold">Keep up the great work!</p>
+                                </>
+                            ) : (
+                                <>
+                                    <RotateCcw className="w-24 h-24 text-stone-400 mb-4" />
+                                    <h2 className="text-3xl font-black text-stone-800 mb-2">Keep Practicing!</h2>
+                                    <div className="text-5xl font-black text-stone-300 mb-2">0 XP</div>
+                                    <p className="text-stone-500 font-bold">Try again to earn XP!</p>
+                                </>
+                            )}
                             <p className="text-stone-400 text-xs mt-4 font-medium">(Click anywhere to dismiss)</p>
                         </div>
                     </div>
@@ -346,7 +357,7 @@ export const Reader: React.FC<ReaderProps> = ({ data, subscriptionKey, serviceRe
                             {/* Word Analysis */}
                             <div className="mb-10">
                                 <h3 className="text-center text-stone-400 text-xs font-bold uppercase tracking-widest mb-6">Detailed Analysis</h3>
-                                <div className="flex flex-wrap justify-start gap-x-8 gap-y-16 text-3xl md:text-4xl font-serif-sc leading-loose px-4">
+                                <div className="flex flex-wrap justify-start gap-x-8 gap-y-20 text-3xl md:text-4xl font-serif-sc leading-loose px-4">
                                     {evalResult.wordEvaluations.map((word, idx) => {
                                         let colorClass = 'text-emerald-600'; // Default Good
                                         let decorationClass = '';
@@ -381,7 +392,7 @@ export const Reader: React.FC<ReaderProps> = ({ data, subscriptionKey, serviceRe
                                                 </span>
                                                 {/* Error Icon/Label */}
                                                 {word.errorType !== 'none' && (
-                                                    <span className="absolute -bottom-4 text-[10px] font-bold uppercase tracking-wider text-stone-400 whitespace-nowrap">
+                                                    <span className="text-[10px] font-bold uppercase tracking-wider text-stone-400 whitespace-nowrap mt-1">
                                                         {word.errorType}
                                                     </span>
                                                 )}
