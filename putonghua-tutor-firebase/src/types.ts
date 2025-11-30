@@ -40,6 +40,7 @@ export interface WordEvaluation {
     accuracyScore: number;
     phonemes: PhonemeEvaluation[];
     subWords?: CharacterEvaluation[];
+    isPunctuation?: boolean;
 }
 
 export interface PronunciationResult {

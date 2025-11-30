@@ -3,7 +3,8 @@ import { Reader } from './components/Reader';
 import { Dashboard } from './components/Dashboard';
 import { VocabularyMenu } from './components/VocabularyMenu';
 import { PRACTICE_DATA, AZURE_CONFIG } from './constants';
-import { Key, Settings, X, Star } from 'lucide-react';
+import { Key, Settings, X, Star, LogOut } from 'lucide-react';
+import { VOCAB_COURSE } from './data/vocabularyData';
 import type { Chapter } from './data/vocabularyData';
 
 type AppMode = 'HOME' | 'READING' | 'VOCAB' | 'EXAM';
@@ -22,6 +23,7 @@ export default function App() {
   const [showSettings, setShowSettings] = useState(false);
   const [availableMics, setAvailableMics] = useState<MediaDeviceInfo[]>([]);
   const [selectedMicId, setSelectedMicId] = useState<string>('');
+  const [devMode, setDevMode] = useState(true);
 
   // Load microphones on mount
   useState(() => {
@@ -42,12 +44,11 @@ export default function App() {
   });
 
   const handleStart = () => {
-    if (username.trim()) {
-      setHasStarted(true);
-      setError('');
-    } else {
-      setError('Please enter a username');
+    if (!username.trim()) {
+      setUsername('Student');
     }
+    setHasStarted(true);
+    setError('');
   };
 
   const handleSelectChapter = (chapter: Chapter) => {
@@ -61,9 +62,14 @@ export default function App() {
   const [readingScore, setReadingScore] = useState<number>(0);
 
   const handleSessionComplete = (score: number, chapterId?: string) => {
-    // XP Logic: Score * 1 (was * 10, which was too high)
-    // Only award XP if score >= 50
-    const earnedXp = score >= 50 ? Math.round(score) : 0;
+    // XP Logic: Match Reader.tsx logic (10 base + 5 bonus)
+    let earnedXp = 0;
+    if (score >= 50) {
+      earnedXp = 10;
+      if (score >= 80) {
+        earnedXp += 5;
+      }
+    }
     setXp(prev => prev + earnedXp);
 
     // Update Chapter Score if it's a vocab chapter
@@ -75,6 +81,33 @@ export default function App() {
     } else {
       // It's a reading session
       setReadingScore(prev => Math.max(prev, score));
+    }
+  };
+
+  const getAdjacentChapter = (offset: number) => {
+    if (!activeChapter) return null;
+    const allChapters = VOCAB_COURSE.flatMap(part => part.chapters);
+    const currentIndex = allChapters.findIndex(c => c.id === activeChapter.id);
+    if (currentIndex !== -1 && currentIndex + offset >= 0 && currentIndex + offset < allChapters.length) {
+      return allChapters[currentIndex + offset];
+    }
+    return null;
+  };
+
+  const handleNextChapter = () => {
+    const next = getAdjacentChapter(1);
+    if (next) {
+      setActiveChapter(next);
+    } else {
+      setActiveChapter(null);
+      setMode('HOME');
+    }
+  };
+
+  const handlePrevChapter = () => {
+    const prev = getAdjacentChapter(-1);
+    if (prev) {
+      setActiveChapter(prev);
     }
   };
 
@@ -90,18 +123,23 @@ export default function App() {
 
     if (mode === 'READING') {
       return (
-        <div className="max-w-4xl mx-auto">
-          <button onClick={() => setMode('HOME')} className="mb-4 text-stone-500 hover:text-stone-800 font-bold px-6 pt-6">
-            ← Back to Dashboard
-          </button>
-          <Reader
-            data={PRACTICE_DATA}
-            subscriptionKey={AZURE_CONFIG.key}
-            serviceRegion={AZURE_CONFIG.region}
-            selectedMicId={selectedMicId}
-            mode="reading"
-            onComplete={(score) => handleSessionComplete(score)}
-          />
+        <div className="h-full flex flex-col">
+          <div className="sticky top-0 z-10 bg-stone-50/95 backdrop-blur-sm -mx-6 px-6 py-4 border-b border-stone-200/50 flex-none">
+            <button onClick={() => setMode('HOME')} className="text-stone-500 hover:text-stone-800 font-bold flex items-center gap-2 transition-colors">
+              ← Back to Dashboard
+            </button>
+          </div>
+          <div className="flex-1 min-h-0">
+            <Reader
+              data={PRACTICE_DATA}
+              subscriptionKey={AZURE_CONFIG.key}
+              serviceRegion={AZURE_CONFIG.region}
+              selectedMicId={selectedMicId}
+              mode="reading"
+              devMode={devMode}
+              onComplete={(score) => handleSessionComplete(score)}
+            />
+          </div>
         </div>
       );
     }
@@ -109,18 +147,28 @@ export default function App() {
     if (mode === 'VOCAB') {
       if (activeChapter) {
         return (
-          <div className="max-w-4xl mx-auto">
-            <button onClick={() => setActiveChapter(null)} className="mb-4 text-stone-500 hover:text-stone-800 font-bold px-6 pt-6">
-              ← Back to Chapters
-            </button>
-            <Reader
-              data={activeChapter.content}
-              subscriptionKey={AZURE_CONFIG.key}
-              serviceRegion={AZURE_CONFIG.region}
-              selectedMicId={selectedMicId}
-              mode="vocab"
-              onComplete={(score) => handleSessionComplete(score, activeChapter.id)}
-            />
+          <div className="h-full flex flex-col">
+            <div className="sticky top-0 z-10 bg-stone-50/95 backdrop-blur-sm -mx-6 px-6 py-4 border-b border-stone-200/50 flex-none">
+              <button onClick={() => setActiveChapter(null)} className="text-stone-500 hover:text-stone-800 font-bold flex items-center gap-2 transition-colors">
+                ← Back to Chapters
+              </button>
+            </div>
+            <div className="flex-1 min-h-0">
+              <Reader
+                data={activeChapter.content}
+                subscriptionKey={AZURE_CONFIG.key}
+                serviceRegion={AZURE_CONFIG.region}
+                selectedMicId={selectedMicId}
+                mode="vocab"
+                devMode={devMode}
+                onComplete={(score) => handleSessionComplete(score, activeChapter.id)}
+                onNextChapter={handleNextChapter}
+                onPrevChapter={handlePrevChapter}
+                hasNextChapter={!!getAdjacentChapter(1)}
+                nextChapterTitle={getAdjacentChapter(1)?.title}
+                previousChapterTitle={getAdjacentChapter(-1)?.title}
+              />
+            </div>
           </div>
         );
       }
@@ -146,15 +194,15 @@ export default function App() {
 
   if (hasStarted) {
     return (
-      <div className="min-h-screen bg-stone-50 text-stone-900 font-sans selection:bg-indigo-100 selection:text-indigo-900 bg-[url('/chinese_bg.png')] bg-cover bg-center bg-fixed bg-no-repeat">
-        <div className="min-h-screen bg-white/90 backdrop-blur-sm overflow-y-auto">
+      <div className="h-full w-full bg-stone-50 flex flex-col overflow-hidden">
+        <div className="flex-1 w-full max-w-[1600px] mx-auto p-4 md:p-6 h-full overflow-hidden flex flex-col">
           {/* Header */}
-          <header className="px-6 py-4 bg-white/80 backdrop-blur-md border-b border-stone-200 flex justify-between items-center sticky top-0 z-50 shadow-sm">
+          <header className="px-6 py-4 bg-white/80 backdrop-blur-md border-b border-stone-200 flex justify-between items-center sticky top-0 z-50 shadow-sm rounded-2xl mb-4 flex-none">
             <div className="flex items-center gap-3 cursor-pointer" onClick={() => { setMode('HOME'); setActiveChapter(null); }}>
               <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-serif font-bold shadow-md">
                 文
               </div>
-              <span className="font-bold text-lg hidden md:inline font-serif-sc tracking-wide">文淵 Putonghua</span>
+              <span className="font-bold text-lg hidden md:inline font-serif-sc tracking-wide">文淵 | AI 普通話學習網</span>
               <span className="font-bold text-lg md:hidden font-serif-sc">文淵</span>
             </div>
             <div className="flex items-center gap-4">
@@ -166,8 +214,17 @@ export default function App() {
                 onClick={() => setShowSettings(true)}
                 className="p-2 rounded-full hover:bg-stone-100 text-stone-500 transition-colors"
                 title="Settings"
+                aria-label="Settings"
               >
                 <Settings size={20} />
+              </button>
+              <button
+                onClick={() => setHasStarted(false)}
+                className="p-2 rounded-full hover:bg-red-50 text-stone-500 hover:text-red-500 transition-colors"
+                title="Logout"
+                aria-label="Logout"
+              >
+                <LogOut size={20} />
               </button>
               <div className="text-xs font-mono text-stone-500 bg-stone-100/80 px-3 py-1.5 rounded-full flex items-center gap-2 border border-stone-200">
                 <span className="font-bold text-indigo-600">v2.1</span>
@@ -203,6 +260,19 @@ export default function App() {
                       ))}
                     </select>
                   </div>
+
+                  <div className="flex items-center justify-between pt-4 border-t border-stone-100">
+                    <div>
+                      <label className="block text-sm font-bold text-stone-800">Developer Mode</label>
+                      <p className="text-xs text-stone-500">Skip Azure processing and use mock data</p>
+                    </div>
+                    <button
+                      onClick={() => setDevMode(!devMode)}
+                      className={`w-12 h-7 rounded-full transition-colors relative ${devMode ? 'bg-indigo-600' : 'bg-stone-200'}`}
+                    >
+                      <div className={`w-5 h-5 bg-white rounded-full shadow-sm absolute top-1 transition-transform ${devMode ? 'left-6' : 'left-1'}`} />
+                    </button>
+                  </div>
                 </div>
 
                 <div className="mt-6 flex justify-end">
@@ -217,7 +287,9 @@ export default function App() {
             </div>
           )}
 
-          {renderContent()}
+          <div className="flex-1 relative overflow-hidden flex flex-col h-full">
+            {renderContent()}
+          </div>
         </div>
       </div>
     );
@@ -234,8 +306,8 @@ export default function App() {
             <div className="w-16 h-16 bg-white/20 backdrop-blur rounded-2xl flex items-center justify-center mx-auto mb-4 text-white shadow-inner border border-white/30">
               <span className="text-3xl font-serif">文</span>
             </div>
-            <h1 className="text-4xl font-bold text-white mb-2 font-serif-sc tracking-wide">普通話</h1>
-            <p className="text-indigo-100 text-lg font-medium">Intensive Oral Practice</p>
+            <h1 className="text-4xl font-bold text-white mb-2 font-serif-sc tracking-wide">文淵普通話</h1>
+            <p className="text-indigo-100 text-lg font-medium">AI Putonghua Practice</p>
             <div className="mt-6 inline-block bg-indigo-500/50 backdrop-blur rounded-lg px-4 py-1 text-xs text-indigo-50 border border-indigo-400">
               Powered by Azure Speech AI
             </div>
@@ -256,6 +328,7 @@ export default function App() {
                 onKeyDown={(e) => e.key === 'Enter' && handleStart()}
                 placeholder="Username (Any name)"
                 className="w-full bg-stone-50 border-2 border-stone-200 rounded-xl px-4 py-3 text-lg text-stone-700 focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500 transition-all outline-none placeholder:text-stone-400"
+                aria-label="Username"
               />
               <input
                 type="password"
@@ -264,6 +337,7 @@ export default function App() {
                 onKeyDown={(e) => e.key === 'Enter' && handleStart()}
                 placeholder="Password (Optional)"
                 className="w-full bg-stone-50 border-2 border-stone-200 rounded-xl px-4 py-3 text-lg text-stone-700 focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500 transition-all outline-none placeholder:text-stone-400"
+                aria-label="Password"
               />
             </div>
 

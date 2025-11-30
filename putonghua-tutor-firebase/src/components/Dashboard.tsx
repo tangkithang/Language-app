@@ -59,7 +59,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onSelectMode, username, ch
     );
 
     return (
-        <div className="max-w-4xl mx-auto p-6">
+        <div className="max-w-4xl mx-auto p-6 h-full overflow-y-auto">
             <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-6">
                 <div className="text-center md:text-left">
                     <h1 className="text-2xl font-bold text-stone-800">Welcome back, {username}!</h1>

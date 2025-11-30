@@ -11,7 +11,7 @@ interface VocabularyMenuProps {
 
 export const VocabularyMenu: React.FC<VocabularyMenuProps> = ({ onSelectChapter, onBack, scores }) => {
     return (
-        <div className="max-w-3xl mx-auto p-6">
+        <div className="w-full mx-auto p-6 h-full overflow-y-auto">
             <button onClick={onBack} className="text-stone-500 hover:text-stone-800 font-bold mb-6 flex items-center gap-2">
                 ← Back to Dashboard
             </button>
@@ -49,8 +49,8 @@ export const VocabularyMenu: React.FC<VocabularyMenuProps> = ({ onSelectChapter,
                                         <div className="flex items-center gap-3">
                                             {score !== undefined && (
                                                 <div className={`px-3 py-1 rounded-full text-xs font-bold ${score >= 80 ? 'bg-emerald-100 text-emerald-700' :
-                                                        score >= 60 ? 'bg-yellow-100 text-yellow-700' :
-                                                            'bg-stone-100 text-stone-500'
+                                                    score >= 60 ? 'bg-yellow-100 text-yellow-700' :
+                                                        'bg-stone-100 text-stone-500'
                                                     }`}>
                                                     {Math.round(score)}
                                                 </div>

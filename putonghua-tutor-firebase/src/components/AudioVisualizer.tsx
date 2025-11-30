@@ -7,9 +7,28 @@ interface AudioVisualizerProps {
 
 export const AudioVisualizer: React.FC<AudioVisualizerProps> = ({ mediaStream, isRecording }) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
     const animationRef = useRef<number | null>(null);
     const analyserRef = useRef<AnalyserNode | null>(null);
     const dataArrayRef = useRef<Uint8Array | null>(null);
+
+    // Handle Resize
+    useEffect(() => {
+        const container = containerRef.current;
+        const canvas = canvasRef.current;
+        if (!container || !canvas) return;
+
+        const resizeObserver = new ResizeObserver(entries => {
+            for (const entry of entries) {
+                const { width, height } = entry.contentRect;
+                canvas.width = width;
+                canvas.height = height;
+            }
+        });
+
+        resizeObserver.observe(container);
+        return () => resizeObserver.disconnect();
+    }, []);
 
     useEffect(() => {
         if (!mediaStream || !isRecording || !canvasRef.current) return;
@@ -18,7 +37,7 @@ export const AudioVisualizer: React.FC<AudioVisualizerProps> = ({ mediaStream, i
         const source = audioContext.createMediaStreamSource(mediaStream);
         const analyser = audioContext.createAnalyser();
 
-        analyser.fftSize = 256;
+        analyser.fftSize = 64; // Lower FFT size for fewer, wider bars
         source.connect(analyser);
 
         const bufferLength = analyser.frequencyBinCount;
@@ -37,25 +56,37 @@ export const AudioVisualizer: React.FC<AudioVisualizerProps> = ({ mediaStream, i
             animationRef.current = requestAnimationFrame(draw);
             analyser.getByteFrequencyData(dataArray);
 
-            ctx.fillStyle = 'rgb(255, 255, 255)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            const barWidth = (canvas.width / bufferLength) * 2.5;
-            let barHeight;
+            const barWidth = (canvas.width / bufferLength) * 0.6; // Spacing
+            const centerY = canvas.height / 2;
             let x = 0;
 
+            // Gradient
+            const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+            gradient.addColorStop(0, '#a5b4fc'); // Indigo 300
+            gradient.addColorStop(0.5, '#4f46e5'); // Indigo 600
+            gradient.addColorStop(1, '#a5b4fc'); // Indigo 300
+            ctx.fillStyle = gradient;
+
+            // Draw mirrored bars
             for (let i = 0; i < bufferLength; i++) {
-                barHeight = dataArray[i] / 2;
+                // Scale height
+                const v = dataArray[i] / 255;
+                const h = v * canvas.height * 0.8; // Max 80% height
 
-                // Create gradient
-                const gradient = ctx.createLinearGradient(0, canvas.height, 0, canvas.height - barHeight);
-                gradient.addColorStop(0, '#4f46e5'); // Indigo 600
-                gradient.addColorStop(1, '#818cf8'); // Indigo 400
+                // Draw rounded rect
+                ctx.beginPath();
+                ctx.roundRect(
+                    x + (canvas.width / bufferLength - barWidth) / 2, // Center in slot
+                    centerY - h / 2,
+                    barWidth,
+                    Math.max(h, 4), // Min height 4px
+                    10 // Radius
+                );
+                ctx.fill();
 
-                ctx.fillStyle = gradient;
-                ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
-
-                x += barWidth + 1;
+                x += canvas.width / bufferLength;
             }
         };
 
@@ -72,11 +103,9 @@ export const AudioVisualizer: React.FC<AudioVisualizerProps> = ({ mediaStream, i
     if (!isRecording) return null;
 
     return (
-        <div className="w-full h-24 flex items-center justify-center bg-stone-50 rounded-xl overflow-hidden border border-stone-200 shadow-inner">
+        <div ref={containerRef} className="w-full h-full flex items-center justify-center min-h-[60px]">
             <canvas
                 ref={canvasRef}
-                width={300}
-                height={100}
                 className="w-full h-full"
             />
         </div>
