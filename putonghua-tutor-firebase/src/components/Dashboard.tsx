@@ -1,8 +1,9 @@
+
 import React from 'react';
 import { BookOpen, Library, GraduationCap } from 'lucide-react';
 
 interface DashboardProps {
-    onSelectMode: (mode: 'READING' | 'VOCAB' | 'EXAM') => void;
+    onSelectMode: (mode: 'HOME' | 'READING' | 'VOCAB' | 'PASSAGE_MENU' | 'EXAM') => void;
     username: string;
     chapterScores: Record<string, number>;
     readingScore: number;
@@ -46,7 +47,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onSelectMode, username, ch
                         fill="transparent"
                         strokeDasharray={175.93}
                         strokeDashoffset={175.93 - (percentage / 100) * 175.93}
-                        className={`${colorClass} transition-all duration-1000 ease-out`}
+                        className={`${colorClass} transition - all duration - 1000 ease - out`}
                         strokeLinecap="round"
                     />
                 </svg>
@@ -75,9 +76,9 @@ export const Dashboard: React.FC<DashboardProps> = ({ onSelectMode, username, ch
             </div>
 
             <div className="grid md:grid-cols-3 gap-6">
-                {/* Reading Passage */}
+                {/* Reading Practice (Passages) */}
                 <button
-                    onClick={() => onSelectMode('READING')}
+                    onClick={() => onSelectMode('PASSAGE_MENU')}
                     className="group relative overflow-hidden bg-white p-8 rounded-3xl shadow-sm border border-stone-100 hover:shadow-xl hover:-translate-y-1 transition-all text-left"
                 >
                     <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-50 rounded-bl-full -mr-8 -mt-8 transition-transform group-hover:scale-110"></div>
@@ -85,8 +86,10 @@ export const Dashboard: React.FC<DashboardProps> = ({ onSelectMode, username, ch
                         <div className="w-12 h-12 bg-indigo-100 text-indigo-600 rounded-xl flex items-center justify-center mb-4">
                             <BookOpen size={24} />
                         </div>
-                        <h3 className="text-xl font-bold text-stone-800 mb-2">Reading Passage</h3>
-                        <p className="text-stone-500 text-sm">Practice reading full articles with native audio and detailed feedback.</p>
+                        <h3 className="text-xl font-bold text-stone-800 mb-2">Reading Practice</h3>
+                        <p className="text-stone-500 text-sm mb-4">Practice reading full passages with AI feedback</p>
+
+
                     </div>
                 </button>
 

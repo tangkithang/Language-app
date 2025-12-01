@@ -1,13 +1,14 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Reader } from './components/Reader';
 import { Dashboard } from './components/Dashboard';
 import { VocabularyMenu } from './components/VocabularyMenu';
 import { PRACTICE_DATA, AZURE_CONFIG } from './constants';
-import { Key, Settings, X, Star, LogOut } from 'lucide-react';
+import { Key, Settings, X, Star, LogOut, ArrowUp } from 'lucide-react';
 import { VOCAB_COURSE } from './data/vocabularyData';
 import type { Chapter } from './data/vocabularyData';
+import { PassageMenu } from './components/PassageMenu';
 
-type AppMode = 'HOME' | 'READING' | 'VOCAB' | 'EXAM';
+type AppMode = 'HOME' | 'READING' | 'VOCAB' | 'PASSAGE_MENU' | 'EXAM';
 
 export default function App() {
   const [username, setUsername] = useState('');
@@ -24,6 +25,23 @@ export default function App() {
   const [availableMics, setAvailableMics] = useState<MediaDeviceInfo[]>([]);
   const [selectedMicId, setSelectedMicId] = useState<string>('');
   const [devMode, setDevMode] = useState(true);
+
+
+  // Scroll to Top State
+  const [showScrollTop, setShowScrollTop] = useState(false);
+  const scrollContainerRef = React.useRef<HTMLDivElement>(null);
+
+  const handleScroll = () => {
+    if (scrollContainerRef.current) {
+      setShowScrollTop(scrollContainerRef.current.scrollTop > 300);
+    }
+  };
+
+  const scrollToTop = () => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
 
   // Load microphones on mount
   useState(() => {
@@ -53,8 +71,14 @@ export default function App() {
 
   const handleSelectChapter = (chapter: Chapter) => {
     setActiveChapter(chapter);
+    // Check if this chapter belongs to VOCAB_COURSE or PASSAGE_COURSE
+    const isVocab = VOCAB_COURSE.some(part => part.chapters.some(c => c.id === chapter.id));
+    if (isVocab) {
+      setMode('VOCAB');
+    } else {
+      setMode('READING');
+    }
   };
-
   // Gamification State
   // Gamification State
   const [xp, setXp] = useState(0);
@@ -82,6 +106,35 @@ export default function App() {
       // It's a reading session
       setReadingScore(prev => Math.max(prev, score));
     }
+  };
+
+  // Passage Progress State
+  // Record<chapterId, { pageScores: Record<pageIndex, number>, totalPages: number }>
+  const [passageProgress, setPassageProgress] = useState<Record<string, { pageScores: Record<number, number>, totalPages: number }>>({});
+
+  const handlePageComplete = (chapterId: string, pageIndex: number, score: number, totalPages: number) => {
+    setPassageProgress(prev => {
+      const chapterProgress = prev[chapterId] || { pageScores: {}, totalPages };
+      const newPageScores = { ...chapterProgress.pageScores, [pageIndex]: score };
+
+      // Calculate average score for the chapter
+      const scores = Object.values(newPageScores);
+      const avgScore = Math.round(scores.reduce((a, b) => a + b, 0) / scores.length);
+
+      // Update the main chapterScores for dashboard/menu display
+      setChapterScores(prevScores => ({
+        ...prevScores,
+        [chapterId]: avgScore
+      }));
+
+      return {
+        ...prev,
+        [chapterId]: {
+          pageScores: newPageScores,
+          totalPages
+        }
+      };
+    });
   };
 
   const getAdjacentChapter = (offset: number) => {
@@ -121,7 +174,50 @@ export default function App() {
       />;
     }
 
+    if (mode === 'PASSAGE_MENU') {
+      return <PassageMenu
+        onSelectChapter={handleSelectChapter}
+        onBack={() => setMode('HOME')}
+        scores={chapterScores}
+        passageProgress={passageProgress}
+      />;
+    }
+
+
+
     if (mode === 'READING') {
+      // If we are in READING mode but have an active chapter (from Passage Menu), use it
+      if (activeChapter) {
+        return (
+          <div className="h-full flex flex-col">
+            <div className="sticky top-0 z-10 bg-stone-50/95 backdrop-blur-sm -mx-6 px-6 py-4 border-b border-stone-200/50 flex-none">
+              <button onClick={() => {
+                setActiveChapter(null);
+                setMode('PASSAGE_MENU');
+              }} className="text-stone-500 hover:text-stone-800 font-bold flex items-center gap-2 transition-colors">
+                ← Back to Menu
+              </button>
+            </div>
+            <div className="flex-1 min-h-0">
+              <Reader
+                data={activeChapter.content}
+                subscriptionKey={AZURE_CONFIG.key}
+                serviceRegion={AZURE_CONFIG.region}
+                selectedMicId={selectedMicId}
+                mode="reading"
+                devMode={devMode}
+                onComplete={(score) => handleSessionComplete(score)}
+                onPageComplete={(pageIndex, score) => handlePageComplete(activeChapter.id, pageIndex, score, activeChapter.content.sections?.length || 1)}
+                savedPageScores={passageProgress[activeChapter.id]?.pageScores || {}}
+                pageIndex={1}
+                totalPages={activeChapter.content.sections?.length || 1}
+              />
+            </div>
+          </div>
+        );
+      }
+
+      // Fallback to legacy READING mode (if any) or redirect
       return (
         <div className="h-full flex flex-col">
           <div className="sticky top-0 z-10 bg-stone-50/95 backdrop-blur-sm -mx-6 px-6 py-4 border-b border-stone-200/50 flex-none">
@@ -153,21 +249,77 @@ export default function App() {
                 ← Back to Chapters
               </button>
             </div>
-            <div className="flex-1 min-h-0">
-              <Reader
-                data={activeChapter.content}
-                subscriptionKey={AZURE_CONFIG.key}
-                serviceRegion={AZURE_CONFIG.region}
-                selectedMicId={selectedMicId}
-                mode="vocab"
-                devMode={devMode}
-                onComplete={(score) => handleSessionComplete(score, activeChapter.id)}
-                onNextChapter={handleNextChapter}
-                onPrevChapter={handlePrevChapter}
-                hasNextChapter={!!getAdjacentChapter(1)}
-                nextChapterTitle={getAdjacentChapter(1)?.title}
-                previousChapterTitle={getAdjacentChapter(-1)?.title}
-              />
+            <div
+              className="flex-1 min-h-0 overflow-y-auto scroll-smooth"
+              ref={scrollContainerRef}
+              onScroll={handleScroll}
+            >
+              {(() => {
+                // Calculate context: Which page is this in the current group?
+                const currentPart = VOCAB_COURSE.find(part => part.chapters.some(c => c.id === activeChapter.id));
+
+                if (currentPart) {
+                  // Group chapters by base title to find the specific group this chapter belongs to
+                  const groups: Record<string, Chapter[]> = {};
+                  currentPart.chapters.forEach(c => {
+                    const baseTitle = c.title.replace(/\s*\(\d+\)$/, '').trim();
+                    if (!groups[baseTitle]) groups[baseTitle] = [];
+                    groups[baseTitle].push(c);
+                  });
+
+                  // Find which group contains our active chapter
+                  const activeBaseTitle = activeChapter.title.replace(/\s*\(\d+\)$/, '').trim();
+                  const groupChapters = groups[activeBaseTitle] || [];
+
+                  return (
+                    <Reader
+                      data={activeChapter.content}
+                      subscriptionKey={AZURE_CONFIG.key}
+                      serviceRegion={AZURE_CONFIG.region}
+                      selectedMicId={selectedMicId}
+                      mode="vocab"
+                      devMode={devMode}
+                      onComplete={(score) => handleSessionComplete(score, activeChapter.id)}
+                      onNextChapter={handleNextChapter}
+                      onPrevChapter={handlePrevChapter}
+                      hasNextChapter={!!getAdjacentChapter(1)}
+                      nextChapterTitle={getAdjacentChapter(1)?.title}
+                      previousChapterTitle={getAdjacentChapter(-1)?.title}
+                      groupChapters={groupChapters}
+                      onJumpToChapter={(chapterId) => {
+                        const chapter = groupChapters.find(c => c.id === chapterId);
+                        if (chapter) handleSelectChapter(chapter);
+                      }}
+                    />
+                  );
+                }
+
+                return (
+                  <Reader
+                    data={activeChapter.content}
+                    subscriptionKey={AZURE_CONFIG.key}
+                    serviceRegion={AZURE_CONFIG.region}
+                    selectedMicId={selectedMicId}
+                    mode="vocab"
+                    devMode={devMode}
+                    onComplete={(score) => handleSessionComplete(score, activeChapter.id)}
+                    onNextChapter={handleNextChapter}
+                    onPrevChapter={handlePrevChapter}
+                    hasNextChapter={!!getAdjacentChapter(1)}
+                    nextChapterTitle={getAdjacentChapter(1)?.title}
+                    previousChapterTitle={getAdjacentChapter(-1)?.title}
+                  />
+                );
+              })()}
+
+              {/* Scroll to Top Button */}
+              <button
+                onClick={scrollToTop}
+                className={`fixed bottom-8 right-8 bg-indigo-600 text-white p-3 rounded-full shadow-lg hover:bg-indigo-700 transition-all duration-300 z-50 ${showScrollTop ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10 pointer-events-none'}`}
+                aria-label="Scroll to top"
+              >
+                <ArrowUp size={24} />
+              </button>
             </div>
           </div>
         );

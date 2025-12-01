@@ -1,8 +1,15 @@
 import React, { useState, useRef, useEffect } from 'react';
-import type { AnalysisResult, PronunciationResult } from '../types';
 import { evaluatePronunciation } from '../services/azureSpeechService';
+import { groupSentencesIntoPages } from '../utils/textUtils';
+import { formatPinyin, hasNeutralTone } from '../utils/pinyinUtils';
+import type { AnalysisResult, PronunciationResult, ScriptSection } from '../types';
 import { AudioVisualizer } from './AudioVisualizer';
-import { Mic, Square, RotateCcw, AlertCircle, BookOpen, Volume2, ArrowRight, Trophy, Clock, HelpCircle, X, ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
+import {
+    Square, Mic, RotateCcw, Volume2,
+    ChevronLeft, ChevronRight, X,
+    Star, ArrowRight, HelpCircle,
+    Settings, BookOpen, List, CheckCircle2, AlertCircle, Loader2, Trophy
+} from 'lucide-react';
 import { Confetti } from './Confetti';
 
 
@@ -77,7 +84,7 @@ const ScoreGauge = ({ score, shouldAnimate }: { score: number, shouldAnimate: bo
                 <span className={`text-3xl font-black ${colorClass}`}>
                     {displayScore}
                 </span>
-                <span className="text-[10px] font-bold text-stone-400 uppercase tracking-wider">Score</span>
+                <span className="text-[10px] font-bold text-stone-400 uppercase tracking-wider">Page Score</span>
             </div>
         </div>
     );
@@ -96,6 +103,12 @@ interface ReaderProps {
     hasNextChapter?: boolean;
     nextChapterTitle?: string;
     previousChapterTitle?: string;
+    pageIndex?: number;
+    totalPages?: number;
+    groupChapters?: { id: string; title: string }[];
+    onJumpToChapter?: (chapterId: string) => void;
+    onPageComplete?: (pageIndex: number, score: number) => void;
+    savedPageScores?: Record<number, number>;
 }
 
 export const Reader: React.FC<ReaderProps> = ({ data, subscriptionKey, serviceRegion, selectedMicId, mode,
@@ -104,11 +117,37 @@ export const Reader: React.FC<ReaderProps> = ({ data, subscriptionKey, serviceRe
     onNextChapter,
     onPrevChapter,
     hasNextChapter,
-    nextChapterTitle,
-    previousChapterTitle
+    previousChapterTitle,
+    pageIndex,
+    totalPages,
+    groupChapters,
+    onJumpToChapter,
+    onPageComplete,
+    savedPageScores
 }) => {
     // Navigation State
     const [sectionIndex, setSectionIndex] = useState(0);
+    const [showQuickNav, setShowQuickNav] = useState(false);
+    const [showScoringDebugger, setShowScoringDebugger] = useState(false);
+    const [scoringWeights, setScoringWeights] = useState({
+        accuracy: 80,
+        fluency: 0,
+        completeness: 20,
+        prosody: 0,
+        wordThreshold: 80
+    });
+    // Local state for the mixer inputs
+    const [tempWeights, setTempWeights] = useState(scoringWeights);
+    const [mixerError, setMixerError] = useState<string | null>(null);
+
+    // Sync temp weights when opening debugger
+    useEffect(() => {
+        if (showScoringDebugger) {
+            setTempWeights(scoringWeights);
+            setMixerError(null);
+        }
+    }, [showScoringDebugger]);
+    const [flattenedSections, setFlattenedSections] = useState<ScriptSection[]>([]);
 
     // Interaction State
     const [status, setStatus] = useState<string>('IDLE');
@@ -116,7 +155,6 @@ export const Reader: React.FC<ReaderProps> = ({ data, subscriptionKey, serviceRe
     // Playback Highlight State
     const [activeWordIndex, setActiveWordIndex] = useState<number>(-1);
     const [countdown, setCountdown] = useState(3);
-    const [timeLeft, setTimeLeft] = useState(0); // Timer for recording
     const [playbackRate, setPlaybackRate] = useState<number>(1.0);
 
     // Audio/Recording Refs
@@ -136,11 +174,35 @@ export const Reader: React.FC<ReaderProps> = ({ data, subscriptionKey, serviceRe
     const [showScoringGuide, setShowScoringGuide] = useState(false);
     const [, setIsAnimatingXp] = useState(false);
     const [isPlayingRecording, setIsPlayingRecording] = useState(false);
+    const [isStarBouncing, setIsStarBouncing] = useState(false);
 
-    const currentSection = data.sections[sectionIndex];
+
+    // Flatten sections into pages on mount/data change
+    useEffect(() => {
+        if (!data || !data.sections) return;
+
+        const newSections: ScriptSection[] = [];
+
+        data.sections.forEach(section => {
+            // Group sentences into pages of max 60 chars (approx 20-30s reading)
+            const pages = groupSentencesIntoPages(section.sentences, 60);
+
+            pages.forEach((pageSentences: any[]) => {
+                newSections.push({
+                    speaker: section.speaker,
+                    sentences: pageSentences
+                });
+            });
+        });
+
+        setFlattenedSections(newSections);
+        setSectionIndex(0);
+    }, [data]);
+
+    const currentSection = flattenedSections[sectionIndex] || { sentences: [], speaker: '' };
     const currentTokens = currentSection.sentences.flatMap(s => s.tokens);
     // Construct fullText from tokens to ensure 1:1 mapping for highlighting
-    const fullText = currentTokens.map(t => t.hanzi).join("");
+
 
     useEffect(() => {
         // Reset state when section changes
@@ -173,9 +235,14 @@ export const Reader: React.FC<ReaderProps> = ({ data, subscriptionKey, serviceRe
 
     const userAudioPlayerRef = useRef<HTMLAudioElement | null>(null);
     const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
+    const ttsTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
     const stopAudio = () => {
         window.speechSynthesis.cancel();
+        if (ttsTimeoutRef.current) {
+            clearTimeout(ttsTimeoutRef.current);
+            ttsTimeoutRef.current = null;
+        }
         if (userAudioPlayerRef.current) {
             userAudioPlayerRef.current.pause();
             userAudioPlayerRef.current.currentTime = 0;
@@ -188,10 +255,30 @@ export const Reader: React.FC<ReaderProps> = ({ data, subscriptionKey, serviceRe
     };
 
     // --- TTS LOGIC ---
-    const speakWord = (text: string) => {
+    const speakWord = (text: string, pinyin?: string) => {
         if (status !== 'IDLE' && status !== 'FEEDBACK') return;
         window.speechSynthesis.cancel();
-        const utterance = new SpeechSynthesisUtterance(text);
+
+        // Use formatted pinyin if available, otherwise text
+        // Hybrid Strategy:
+        // 1. If word has neutral tone (no tone mark), use Hanzi (text) to let TTS infer.
+        // 2. If word has full tones, use Pinyin to force accuracy (polyphones).
+        let textToSpeak = text;
+        if (pinyin) {
+            const syllables = formatPinyin(text, pinyin);
+            // Check if ANY syllable is neutral (no tone mark)
+            const hasNeutral = syllables.some(s => hasNeutralTone(s));
+
+            if (hasNeutral) {
+                // Use Hanzi for neutral tones
+                textToSpeak = text;
+            } else {
+                // Use space-separated pinyin for full tones
+                textToSpeak = syllables.join(' ');
+            }
+        }
+
+        const utterance = new SpeechSynthesisUtterance(textToSpeak);
         utterance.lang = 'zh-CN';
         const voices = window.speechSynthesis.getVoices();
         const bestVoice = voices.find(v =>
@@ -204,54 +291,67 @@ export const Reader: React.FC<ReaderProps> = ({ data, subscriptionKey, serviceRe
 
     const playDemo = (rateOverride?: number) => {
         stopAudio();
-
-        // Join with Chinese comma for pause in vocab mode, but continuous for reading
-        const separator = mode === 'reading' ? "" : "，";
-        const spokenText = currentTokens.map(t => t.hanzi).join(separator);
-
-        const utterance = new SpeechSynthesisUtterance(spokenText);
-        utterance.lang = 'zh-CN';
-        // Use override if provided, otherwise state
-        const rateToUse = rateOverride !== undefined ? rateOverride : playbackRate;
-        utterance.rate = rateToUse * 0.9;
-
-        const voices = window.speechSynthesis.getVoices();
-        const bestVoice = voices.find(v =>
-            (v.lang === 'zh-CN' || v.lang === 'zh_CN') &&
-            (v.name.includes('Xiaoxiao') || v.name.includes('Yunxi') || v.name.includes('Google'))
-        );
-        if (bestVoice) utterance.voice = bestVoice;
-
-        setActiveWordIndex(-1);
         setStatus('PLAYING');
 
-        utterance.onboundary = (event) => {
-            if (event.name === 'word') {
-                const charIndex = event.charIndex;
-                let charCount = 0;
+        const rateToUse = rateOverride !== undefined ? rateOverride : playbackRate;
+        let currentIndex = 0;
 
-                for (let i = 0; i < currentTokens.length; i++) {
-                    const tokenLen = currentTokens[i].hanzi.length;
+        const speakNextToken = () => {
+            if (currentIndex >= currentTokens.length) {
+                setStatus('IDLE');
+                setActiveWordIndex(-1);
+                return;
+            }
 
-                    // Check if charIndex matches the start of this token
-                    if (charIndex === charCount) {
-                        setActiveWordIndex(i);
-                        break;
-                    }
+            // Check if stopped (status changed externally or stopAudio called)
+            // Note: status ref might be needed if closure captures old status, 
+            // but since we clear timeout in stopAudio, this should be safe.
 
-                    // Advance charCount: token length + separator length
-                    charCount += tokenLen + separator.length;
+            setActiveWordIndex(currentIndex);
+            const token = currentTokens[currentIndex];
+
+            // Strip bracketed pinyin from hanzi (e.g. "行 (xíng)" -> "行")
+            const cleanHanzi = token.hanzi.replace(/\s*\(.*?\)/, '');
+            let textToSpeak = cleanHanzi;
+
+            if (token.pinyin) {
+                const syllables = formatPinyin(cleanHanzi, token.pinyin);
+                const hasNeutral = syllables.some(s => hasNeutralTone(s));
+                if (!hasNeutral) {
+                    textToSpeak = syllables.join(' ');
                 }
             }
+
+            const utterance = new SpeechSynthesisUtterance(textToSpeak);
+            utterance.lang = 'zh-CN';
+            utterance.rate = rateToUse * 0.9;
+
+            const voices = window.speechSynthesis.getVoices();
+            const bestVoice = voices.find(v =>
+                (v.lang === 'zh-CN' || v.lang === 'zh_CN') &&
+                (v.name.includes('Xiaoxiao') || v.name.includes('Yunxi') || v.name.includes('Google'))
+            );
+            if (bestVoice) utterance.voice = bestVoice;
+
+            utterance.onend = () => {
+                currentIndex++;
+                // Add pause before next word
+                ttsTimeoutRef.current = setTimeout(() => {
+                    speakNextToken();
+                }, 100); // 0.6s pause
+            };
+
+            utterance.onerror = (e) => {
+                console.error("TTS Error:", e);
+                setStatus('IDLE');
+                setActiveWordIndex(-1);
+            };
+
+            utteranceRef.current = utterance;
+            window.speechSynthesis.speak(utterance);
         };
 
-        utterance.onend = () => {
-            setStatus('IDLE');
-            setActiveWordIndex(-1);
-        };
-
-        utteranceRef.current = utterance;
-        window.speechSynthesis.speak(utterance);
+        speakNextToken();
     };
 
     const playUserRecording = () => {
@@ -277,6 +377,7 @@ export const Reader: React.FC<ReaderProps> = ({ data, subscriptionKey, serviceRe
             setCountdown((prev) => {
                 if (prev <= 1) {
                     clearInterval(interval);
+                    setStatus('RECORDING');
                     beginRecording();
                     return 0;
                 }
@@ -307,8 +408,8 @@ export const Reader: React.FC<ReaderProps> = ({ data, subscriptionKey, serviceRe
             setStatus('RECORDING');
 
             // Start Timer
-            const initialTime = mode === 'vocab' ? 45 : 60;
-            setTimeLeft(initialTime);
+            // const initialTime = mode === 'vocab' ? 45 : 60; // Removed timer logic
+            // setTimeLeft(initialTime); // Removed timer logic
         } catch (e) {
             console.error(e);
             setErrorMsg("Microphone access denied");
@@ -316,57 +417,14 @@ export const Reader: React.FC<ReaderProps> = ({ data, subscriptionKey, serviceRe
         }
     };
 
-    const generateMockResult = (): PronunciationResult => {
-        const words = currentTokens.map(t => t.hanzi);
-        const mockWordEvaluations = words.map(word => {
-            const rand = Math.random();
-            let errorType: 'tone' | 'pronunciation' | 'skipped' | 'insertion' | 'none' = 'none';
-            let accuracyScore = 95 + Math.random() * 5;
 
-            const isPunctuation = /^[^\u4e00-\u9fa5a-zA-Z0-9]+$/.test(word);
 
-            if (isPunctuation) {
-                return {
-                    word,
-                    correct: true,
-                    errorType: 'none' as const,
-                    accuracyScore: 0,
-                    phonemes: [],
-                    isPunctuation: true
-                };
-            }
-
-            if (rand < 0.1) {
-                errorType = 'tone';
-                accuracyScore = 70 + Math.random() * 10;
-            } else if (rand < 0.2) {
-                errorType = 'pronunciation';
-                accuracyScore = 60 + Math.random() * 10;
-            } else if (rand < 0.25) {
-                errorType = 'skipped';
-                accuracyScore = 0;
-            }
-
-            return {
-                word,
-                correct: errorType === 'none',
-                errorType,
-                accuracyScore: Math.round(accuracyScore),
-                phonemes: [], // Mock empty phonemes for now
-                isPunctuation: false
-            };
-        });
-
-        const overallScore = mockWordEvaluations.reduce((acc, curr) => acc + curr.accuracyScore, 0) / mockWordEvaluations.length;
-
-        return {
-            score: Math.round(overallScore),
-            accuracyScore: Math.round(overallScore),
-            fluencyScore: 85,
-            completenessScore: 90,
-            comment: "Mock feedback generated.",
-            wordEvaluations: mockWordEvaluations
-        };
+    const calculateXp = (score: number) => {
+        if (score >= 90) return 20;
+        if (score >= 80) return 15;
+        if (score >= 70) return 10;
+        if (score >= 60) return 5;
+        return 0;
     };
 
     const finishRecording = () => {
@@ -385,63 +443,52 @@ export const Reader: React.FC<ReaderProps> = ({ data, subscriptionKey, serviceRe
             mediaRecorderRef.current?.stream.getTracks().forEach(track => track.stop());
             setMediaStream(null);
 
-            if (devMode) {
-                // Simulate network delay
-                setTimeout(() => {
-                    const result = generateMockResult();
-                    setEvalResult(result);
-                    setStatus('FEEDBACK');
-
-                    // Calculate XP and Notify Parent
-                    const score = result.score;
-                    onComplete(score);
-
-                    if (score >= 50) {
-                        const baseXp = 10;
-                        const bonusXp = score >= 80 ? 5 : 0;
-                        const totalXp = baseXp + bonusXp;
-                        setXpGained(totalXp);
-                        setShowCelebration(true);
-                        setIsAnimatingXp(true);
-                        setTimeout(() => setIsAnimatingXp(false), 1000);
-                        setTimeout(() => setShowCelebration(false), 5000);
-                    } else {
-                        // Low score feedback
-                        setXpGained(0);
-                        setShowCelebration(true); // Show "Try Again" modal
-                    }
-                }, 1000);
-                return;
-            }
-
             try {
+                const cleanText = currentTokens.map(t => t.hanzi.replace(/\s*\(.*?\)/, '')).join('');
+                const referenceWords = currentTokens.map(t => t.hanzi.replace(/\s*\(.*?\)/, ''));
+                const referencePinyin = currentTokens.map(t => t.pinyin);
+
                 const result = await evaluatePronunciation(
                     subscriptionKey,
                     serviceRegion,
                     audioBlob,
-                    fullText,
-                    currentTokens.map(t => t.hanzi),
-                    currentTokens.map(t => t.pinyin)
+                    cleanText,
+                    referenceWords,
+                    referencePinyin,
+                    {
+                        accuracy: scoringWeights.accuracy / 100,
+                        fluency: scoringWeights.fluency / 100,
+                        completeness: scoringWeights.completeness / 100,
+                        prosody: scoringWeights.prosody / 100,
+                        wordThreshold: scoringWeights.wordThreshold
+                    }
                 );
                 setEvalResult(result);
                 setStatus('FEEDBACK');
+                setIsStarBouncing(true);
+                setTimeout(() => setIsStarBouncing(false), 3000); // Stop bouncing after ~3s (3 bounces)
 
                 // Calculate XP and Notify Parent
+                // Call onComplete callback
                 const score = result.score;
                 onComplete(score);
 
-                if (score >= 50) {
-                    const baseXp = 10;
-                    const bonusXp = score >= 80 ? 5 : 0;
-                    const totalXp = baseXp + bonusXp;
-                    setXpGained(totalXp);
+                // Call onPageComplete if available (for passage progress)
+                // Use sectionIndex + 1 since it's 0-indexed but we want 1-indexed for display
+                if (onPageComplete && mode === 'reading') {
+                    onPageComplete(sectionIndex + 1, score);
+                }
+
+                const xp = calculateXp(score);
+                setXpGained(xp);
+
+                if (xp > 0) {
                     setShowCelebration(true);
                     setIsAnimatingXp(true);
                     setTimeout(() => setIsAnimatingXp(false), 1000);
                     setTimeout(() => setShowCelebration(false), 5000);
                 } else {
                     // Low score feedback
-                    setXpGained(0);
                     setShowCelebration(true); // Show "Try Again" modal
                 }
             } catch (e) {
@@ -454,18 +501,7 @@ export const Reader: React.FC<ReaderProps> = ({ data, subscriptionKey, serviceRe
         mediaRecorderRef.current.stop();
     };
 
-    // Timer Effect
-    useEffect(() => {
-        let interval: NodeJS.Timeout;
-        if (status === 'RECORDING' && timeLeft > 0) {
-            interval = setInterval(() => {
-                setTimeLeft((prev) => prev - 1);
-            }, 1000);
-        } else if (timeLeft === 0 && status === 'RECORDING') {
-            // Optional: Auto-stop or just show 0
-        }
-        return () => clearInterval(interval);
-    }, [status, timeLeft]);
+
 
     // Reset state when data changes (e.g., moving to a new section/chapter)
     useEffect(() => {
@@ -478,8 +514,6 @@ export const Reader: React.FC<ReaderProps> = ({ data, subscriptionKey, serviceRe
         }
         setXpGained(0);
         setShowCelebration(false);
-        setCountdown(0);
-        setTimeLeft(0);
         setActiveWordIndex(-1);
         // Ensure any active recording/playback is stopped
         stopAudio();
@@ -512,14 +546,19 @@ export const Reader: React.FC<ReaderProps> = ({ data, subscriptionKey, serviceRe
                         </div>
                         <div className="flex items-center gap-2">
                             <p className="text-xs text-stone-500 font-bold uppercase tracking-wider">
-                                Section {sectionIndex + 1} / {data.sections.length}
+                                {totalPages && totalPages > 1
+                                    ? `Page ${pageIndex} / ${totalPages}`
+                                    : `Section ${sectionIndex + 1} / ${flattenedSections.length}`
+                                }
                             </p>
                             {/* Progress Bar */}
                             <div className="w-24 h-1.5 bg-stone-100 rounded-full overflow-hidden">
                                 <div
                                     className="h-full bg-indigo-500 rounded-full transition-all duration-500 ease-out"
                                     style={{
-                                        width: `${((sectionIndex + 1) / data.sections.length) * 100}%`
+                                        width: `${totalPages && totalPages > 1
+                                            ? (pageIndex! / totalPages) * 100
+                                            : ((sectionIndex + 1) / flattenedSections.length) * 100}%`
                                     }}
                                 />
                             </div>
@@ -528,6 +567,148 @@ export const Reader: React.FC<ReaderProps> = ({ data, subscriptionKey, serviceRe
                 </div>
 
                 <div className="flex items-center gap-2">
+                    {/* Quick Nav Button */}
+                    {groupChapters && groupChapters.length > 1 && (
+                        <div className="relative">
+                            {/* Scoring Mixer Toggle */}
+                            <div className="fixed bottom-4 left-4 z-50 flex gap-2">
+                                <button
+                                    onClick={() => setShowScoringDebugger(!showScoringDebugger)}
+                                    className={`p-2 rounded-full shadow-lg transition-colors ${showScoringDebugger ? 'bg-indigo-500 text-white' : 'bg-white text-stone-400 border border-stone-200'}`}
+                                    title="Scoring Mixer"
+                                >
+                                    <Settings size={20} />
+                                </button>
+                            </div>
+
+                            {/* Scoring Debugger Panel */}
+                            {showScoringDebugger && (
+                                <div className="fixed bottom-20 left-4 z-50 bg-white p-6 rounded-xl shadow-2xl border border-stone-200 w-72 animate-in slide-in-from-bottom-5">
+                                    <div className="flex justify-between items-center mb-4">
+                                        <h4 className="font-bold text-stone-800 flex items-center gap-2">
+                                            <Settings size={16} /> Scoring Mixer
+                                        </h4>
+                                        <button onClick={() => setShowScoringDebugger(false)} className="text-stone-400 hover:text-stone-600">
+                                            <X size={16} />
+                                        </button>
+                                    </div>
+
+                                    <div className="space-y-3">
+                                        {Object.entries(tempWeights).map(([key, value]) => (
+                                            <div key={key} className="flex items-center justify-between">
+                                                <label className="text-sm font-medium text-stone-600 capitalize w-24">
+                                                    {key === 'wordThreshold' ? 'Word Pass' : key}
+                                                </label>
+                                                <div className="flex items-center gap-2">
+                                                    <input
+                                                        type="number"
+                                                        min="0"
+                                                        max="100"
+                                                        value={value}
+                                                        onChange={(e) => {
+                                                            const val = Math.max(0, Math.min(100, parseInt(e.target.value) || 0));
+                                                            setTempWeights(prev => ({ ...prev, [key]: val }));
+                                                            setMixerError(null);
+                                                        }}
+                                                        className="w-16 px-2 py-1 text-right border border-stone-300 rounded-md text-sm font-mono focus:ring-2 focus:ring-indigo-500 outline-none"
+                                                    />
+                                                    <span className="text-stone-400 text-xs">%</span>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+
+                                    <div className="mt-4 pt-4 border-t border-stone-100">
+                                        <div className="flex justify-between items-center mb-3">
+                                            <span className="text-xs font-bold text-stone-500 uppercase">Total Score Mix</span>
+                                            <span className={`font-mono font-bold ${(tempWeights.accuracy + tempWeights.fluency + tempWeights.completeness + tempWeights.prosody) === 100
+                                                ? 'text-emerald-600'
+                                                : 'text-rose-500'
+                                                }`}>
+                                                {tempWeights.accuracy + tempWeights.fluency + tempWeights.completeness + tempWeights.prosody}%
+                                            </span>
+                                        </div>
+
+                                        {mixerError && (
+                                            <div className="mb-3 p-2 bg-rose-50 text-rose-600 text-xs rounded-lg flex items-start gap-2">
+                                                <AlertCircle size={14} className="mt-0.5 flex-none" />
+                                                {mixerError}
+                                            </div>
+                                        )}
+
+                                        <div className="flex gap-2">
+                                            <button
+                                                onClick={() => {
+                                                    const sum = tempWeights.accuracy + tempWeights.fluency + tempWeights.completeness + tempWeights.prosody;
+                                                    if (sum !== 100) {
+                                                        setMixerError(`Score Mix must be 100% (Current: ${sum}%)`);
+                                                        return;
+                                                    }
+                                                    setScoringWeights(tempWeights);
+                                                    setShowScoringDebugger(false);
+                                                }}
+                                                className="flex-1 bg-indigo-600 text-white py-2 rounded-lg text-sm font-bold hover:bg-indigo-700 transition-colors shadow-sm"
+                                            >
+                                                Save
+                                            </button>
+                                            <button
+                                                onClick={() => {
+                                                    setTempWeights({ accuracy: 80, fluency: 0, completeness: 20, prosody: 0, wordThreshold: 80 });
+                                                    setMixerError(null);
+                                                }}
+                                                className="px-3 py-2 bg-stone-100 text-stone-600 rounded-lg text-sm font-bold hover:bg-stone-200 transition-colors"
+                                                title="Reset to Default"
+                                            >
+                                                <RotateCcw size={16} />
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                            <button
+                                onClick={() => setShowQuickNav(!showQuickNav)}
+                                className="p-2 hover:bg-stone-100 rounded-full text-stone-500 transition-colors"
+                                title="Quick Navigation"
+                            >
+                                <List size={20} />
+                            </button>
+
+                            {/* Dropdown Menu */}
+                            {showQuickNav && (
+                                <>
+                                    <div
+                                        className="fixed inset-0 z-40"
+                                        onClick={() => setShowQuickNav(false)}
+                                    />
+                                    <div className="absolute right-0 top-full mt-2 w-64 bg-white rounded-xl shadow-xl border border-stone-100 py-2 z-50 max-h-[60vh] overflow-y-auto">
+                                        {groupChapters.map((chapter, idx) => {
+                                            // Check if this is the current chapter
+                                            // We don't have current chapter ID passed directly, but we can infer from title or pass it
+                                            // For now, let's assume we can match by title or just list them
+                                            const isCurrent = chapter.title === data.title;
+
+                                            return (
+                                                <button
+                                                    key={chapter.id}
+                                                    onClick={() => {
+                                                        onJumpToChapter?.(chapter.id);
+                                                        setShowQuickNav(false);
+                                                    }}
+                                                    className={`w-full text-left px-4 py-3 hover:bg-stone-50 transition-colors flex items-center gap-3 ${isCurrent ? 'bg-indigo-50 text-indigo-600' : 'text-stone-600'}`}
+                                                >
+                                                    <span className="text-xs font-bold w-6 h-6 flex items-center justify-center rounded-full bg-stone-100 text-stone-500 flex-none">
+                                                        {idx + 1}
+                                                    </span>
+                                                    <span className="text-sm font-medium line-clamp-1">{chapter.title}</span>
+                                                    {isCurrent && <CheckCircle2 size={14} className="ml-auto flex-none" />}
+                                                </button>
+                                            );
+                                        })}
+                                    </div>
+                                </>
+                            )}
+                        </div>
+                    )}
                     {/* XP Display */}
                     {/* XP Display Removed from here, now in global header */}
 
@@ -556,24 +737,31 @@ export const Reader: React.FC<ReaderProps> = ({ data, subscriptionKey, serviceRe
                         </button>
                         <button
                             onClick={() => {
-                                if (sectionIndex < data.sections.length - 1) {
+                                if (sectionIndex < flattenedSections.length - 1) {
                                     setSectionIndex(sectionIndex + 1);
                                 } else if (onNextChapter) {
                                     onNextChapter();
                                 }
                             }}
-                            disabled={(sectionIndex === data.sections.length - 1 && !hasNextChapter) || status === 'RECORDING'}
-                            className="p-2 rounded-full hover:bg-stone-200 disabled:opacity-30 transition-colors"
-                            aria-label="Next"
+                            disabled={sectionIndex === flattenedSections.length - 1 && !onNextChapter}
+                            className="flex items-center gap-2 px-4 py-2 bg-stone-800 text-white rounded-full hover:bg-stone-700 disabled:opacity-30 transition-all shadow-sm hover:shadow-md"
                             title={
-                                sectionIndex < data.sections.length - 1
+                                sectionIndex < flattenedSections.length - 1
                                     ? "Next Section"
-                                    : nextChapterTitle
-                                        ? `Next Chapter: ${nextChapterTitle}`
-                                        : "No Next Chapter"
+                                    : (totalPages && totalPages > 1 && pageIndex && pageIndex < totalPages)
+                                        ? "Next Page"
+                                        : "Next Chapter"
                             }
                         >
-                            <ChevronRight size={20} />
+                            <span className="text-sm font-bold">
+                                {sectionIndex < flattenedSections.length - 1
+                                    ? "Next Section"
+                                    : (totalPages && totalPages > 1 && pageIndex && pageIndex < totalPages)
+                                        ? "Next Page"
+                                        : "Next Chapter"
+                                }
+                            </span>
+                            <ChevronRight size={18} />
                         </button>
                     </div>
                 </div>
@@ -599,7 +787,7 @@ export const Reader: React.FC<ReaderProps> = ({ data, subscriptionKey, serviceRe
                     )}
 
                     {/* CONTENT AREA */}
-                    <div className="flex-1 relative overflow-y-auto overflow-x-hidden p-3 md:p-5 flex flex-col items-center">
+                    <div className="flex-1 relative overflow-y-auto overflow-x-hidden p-3 md:p-5 flex flex-col items-center pb-40">
 
                         {/* Countdown Overlay (Global) */}
                         {status === 'COUNTDOWN' && (
@@ -609,6 +797,8 @@ export const Reader: React.FC<ReaderProps> = ({ data, subscriptionKey, serviceRe
                                 </div>
                             </div>
                         )}
+
+
 
                         {/* Loading Overlay */}
                         {status === 'ANALYZING' && (
@@ -626,13 +816,19 @@ export const Reader: React.FC<ReaderProps> = ({ data, subscriptionKey, serviceRe
                                     <div
                                         key={idx}
                                         className="flex flex-col items-center relative group cursor-pointer"
-                                        onClick={() => speakWord(token.hanzi)}
+                                        onClick={() => {
+                                            // Strip bracketed pinyin from hanzi for TTS (e.g. "行 (xíng)" -> "行")
+                                            // This ensures TTS doesn't read the brackets if it falls back to Hanzi
+                                            const cleanHanzi = token.hanzi.replace(/\s*\(.*?\)/, '');
+                                            speakWord(cleanHanzi, token.pinyin);
+                                        }}
                                     >
                                         {/* Pinyin above-Hidden during recording but keeps space */}
+                                        {/* Exception: Always show pinyin for Polyphonic sections so user knows which tone to read */}
                                         <span className={`
                                             text-sm font-sans mb-1 transition-all duration-200 select-none
                                             ${isActive ? 'text-indigo-600 font-bold scale-110' : 'text-stone-400 group-hover:text-indigo-400'}
-                                            ${status === 'RECORDING' ? 'opacity-0' : 'opacity-100'}
+                                            ${status === 'RECORDING' && !data.title?.toLowerCase().includes('polyphonic') && !data.title?.includes('多音字') ? 'opacity-0' : 'opacity-100'}
                                         `}>
                                             {token.pinyin}
                                         </span>
@@ -641,7 +837,8 @@ export const Reader: React.FC<ReaderProps> = ({ data, subscriptionKey, serviceRe
 px-1 rounded transition-colors duration-200
                                 ${isActive ? 'bg-indigo-100 text-indigo-900 shadow-sm ring-2 ring-indigo-200' : 'text-stone-800 group-hover:text-indigo-600'}
 `}>
-                                            {token.hanzi}
+                                            {/* Strip bracketed pinyin for display */}
+                                            {token.hanzi.replace(/\s*\(.*?\)/, '')}
                                         </span>
                                     </div>
                                 )
@@ -665,37 +862,26 @@ px-1 rounded transition-colors duration-200
                             <h3 className="text-stone-400 text-xs font-bold uppercase tracking-widest">Controls</h3>
                         </div>
 
-                        {/* Timer Display */}
-                        <div className="h-20 flex items-center justify-center w-full">
-                            {status === 'RECORDING' ? (
-                                <div className="flex flex-col items-center animate-in fade-in zoom-in">
-                                    <div className={`text-6xl font-black font-mono ${timeLeft <= 10 ? 'text-red-500 animate-pulse' : 'text-stone-700'} `}>
-                                        {Math.floor(timeLeft / 60)}:{String(timeLeft % 60).padStart(2, '0')}
-                                    </div>
-                                    <div className="text-[10px] font-bold text-stone-400 uppercase tracking-widest mt-1">Recording Time</div>
-                                </div>
-                            ) : (
-                                <div className="text-stone-300 font-mono text-6xl font-bold select-none opacity-50">
-                                    --:--
-                                </div>
-                            )}
+                        {/* Timer Display - REMOVED */}
+                        <div className="h-4 flex items-center justify-center w-full">
+                            {/* Spacer */}
                         </div>
 
                         {/* Main Action Button */}
                         <div className="relative flex flex-col items-center gap-2 h-32 justify-center">
-                            {status !== 'PLAYING' && status !== 'FEEDBACK' && (
+                            {status !== 'FEEDBACK' && (
                                 <>
                                     <div className="h-24 flex items-center justify-center">
                                         <button
                                             onClick={status === 'RECORDING' ? finishRecording : startPracticeSequence}
-                                            disabled={status === 'ANALYZING' || status === 'COUNTDOWN'}
+                                            disabled={status === 'ANALYZING' || status === 'COUNTDOWN' || status === 'PLAYING'}
                                             className={`
                                                 rounded-full flex items-center justify-center shadow-xl transition-all font-bold text-lg
                                                 ${status === 'RECORDING'
                                                     ? 'w-24 h-24 bg-red-500 text-white animate-pulse ring-4 ring-red-200'
                                                     : 'w-24 h-24 bg-stone-900 text-white hover:bg-black hover:scale-105 shadow-stone-300'
                                                 }
-                                                ${status === 'ANALYZING' ? 'opacity-50 cursor-not-allowed' : ''}
+                                                ${(status === 'ANALYZING' || status === 'PLAYING') ? 'opacity-50 cursor-not-allowed grayscale' : ''}
                                             `}
                                         >
                                             {status === 'RECORDING' ? (
@@ -790,297 +976,346 @@ w-full py-3 rounded-xl flex items-center justify-center gap-2 font-bold transiti
             </div>
 
             {/* CELEBRATION OVERLAY (Full Screen) */}
-            {showCelebration && (
-                <div
-                    className="absolute inset-0 z-50 flex items-center justify-center cursor-pointer bg-white/80 backdrop-blur-sm animate-in fade-in duration-300"
-                    onClick={() => setShowCelebration(false)}
-                >
-                    <Confetti />
-                    <div className={`bg-white/90 backdrop-blur-md p-8 rounded-3xl shadow-2xl border-4 ${xpGained > 0 ? 'border-yellow-400' : 'border-stone-200'} flex flex-col items-center animate-in zoom-in-50 duration-500 pointer-events-none`}>
-                        {xpGained > 0 ? (
-                            <>
-                                <Trophy className="w-24 h-24 text-yellow-500 mb-4 animate-bounce" />
-                                <h2 className="text-3xl font-black text-stone-800 mb-2">Lesson Complete!</h2>
-                                <div className="text-5xl font-black text-yellow-500 mb-2">+{xpGained} XP</div>
-                                <p className="text-stone-500 font-bold">Keep up the great work!</p>
-                            </>
-                        ) : (
-                            <>
-                                <RotateCcw className="w-24 h-24 text-stone-400 mb-4" />
-                                <h2 className="text-3xl font-black text-stone-800 mb-2">Keep Practicing!</h2>
-                                <div className="text-5xl font-black text-stone-300 mb-2">0 XP</div>
-                                <p className="text-stone-500 font-bold">Try again to earn XP!</p>
-                            </>
-                        )}
-                        <p className="text-stone-400 text-xs mt-4 font-medium">(Click anywhere to dismiss)</p>
+            {
+                showCelebration && (
+                    <div
+                        className="absolute inset-0 z-50 flex items-center justify-center cursor-pointer bg-white/80 backdrop-blur-sm animate-in fade-in duration-300"
+                        onClick={() => setShowCelebration(false)}
+                    >
+                        <Confetti />
+                        <div className={`bg-white/90 backdrop-blur-md p-8 rounded-3xl shadow-2xl border-4 ${xpGained > 0 ? 'border-yellow-400' : 'border-stone-200'} flex flex-col items-center animate-in zoom-in-50 duration-500 pointer-events-none`}>
+                            {xpGained > 0 ? (
+                                <>
+                                    <Trophy className="w-24 h-24 text-yellow-500 mb-4 animate-bounce" />
+                                    <h2 className="text-3xl font-black text-stone-800 mb-2">Lesson Complete!</h2>
+                                    <div className="text-5xl font-black text-yellow-500 mb-2">+{xpGained} XP</div>
+                                    <p className="text-stone-500 font-bold">Keep up the great work!</p>
+                                </>
+                            ) : (
+                                <>
+                                    <RotateCcw className="w-24 h-24 text-stone-400 mb-4" />
+                                    <h2 className="text-3xl font-black text-stone-800 mb-2">Keep Practicing!</h2>
+                                    <div className="text-5xl font-black text-stone-300 mb-2">0 XP</div>
+                                    <p className="text-stone-500 font-bold">Try again to earn XP!</p>
+                                </>
+                            )}
+                            <p className="text-stone-400 text-xs mt-4 font-medium">(Click anywhere to dismiss)</p>
+                        </div>
                     </div>
-                </div>
-            )}
+                )
+            }
 
             {/* FULL SCREEN FEEDBACK OVERLAY */}
-            {status === 'FEEDBACK' && evalResult && (
-                <div className="absolute inset-0 z-40 bg-stone-50 animate-in fade-in zoom-in-95 duration-300 flex flex-col overflow-hidden">
-                    {/* Fixed Header & Stats Wrapper */}
-                    <div className="flex-none flex flex-col gap-6 p-6 md:p-8 border-b border-stone-200/50 bg-white/80 backdrop-blur-md z-10 shadow-sm">
-                        {/* Header & Actions */}
-                        <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-                            <div>
-                                <h2 className="text-3xl font-black text-stone-800 mb-1">Practice Complete!</h2>
-                                <p className="text-stone-500 font-medium">Here's how you performed</p>
-                            </div>
-                            <div className="flex gap-3">
-                                <button
-                                    onClick={() => {
-                                        if (isPlayingRecording) {
+            {
+                status === 'FEEDBACK' && evalResult && (
+                    <div className="absolute inset-0 z-40 bg-stone-50 animate-in fade-in zoom-in-95 duration-300 flex flex-col overflow-hidden">
+                        {/* Fixed Header & Stats Wrapper */}
+                        <div className="flex-none flex flex-col gap-6 p-6 md:p-8 border-b border-stone-200/50 bg-white/80 backdrop-blur-md z-10 shadow-sm">
+                            {/* Header & Actions */}
+                            <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+                                <div>
+                                    <h2 className="text-3xl font-black text-stone-800 mb-1">Practice Complete!</h2>
+                                    <p className="text-stone-500 font-medium">Here's how you performed</p>
+                                </div>
+                                <div className="flex gap-3">
+                                    <button
+                                        onClick={() => {
+                                            if (isPlayingRecording) {
+                                                stopAudio();
+                                                setIsPlayingRecording(false);
+                                            } else {
+                                                playUserRecording();
+                                            }
+                                        }}
+                                        className="flex items-center gap-2 px-5 py-2.5 bg-white border border-stone-200 rounded-lg font-bold text-sm text-stone-700 hover:bg-stone-50 hover:border-stone-300 transition-all"
+                                        aria-label={isPlayingRecording ? "Stop Playing" : "Hear Recording"}
+                                    >
+                                        {isPlayingRecording ? (
+                                            <>
+                                                <Square size={16} /> Stop Playing
+                                            </>
+                                        ) : (
+                                            <>
+                                                <Volume2 size={16} /> Hear Recording
+                                            </>
+                                        )}
+                                    </button>
+                                    <button
+                                        onClick={() => {
                                             stopAudio();
-                                            setIsPlayingRecording(false);
-                                        } else {
-                                            playUserRecording();
-                                        }
-                                    }}
-                                    className="flex items-center gap-2 px-5 py-2.5 bg-white border border-stone-200 rounded-lg font-bold text-sm text-stone-700 hover:bg-stone-50 hover:border-stone-300 transition-all"
-                                    aria-label={isPlayingRecording ? "Stop Playing" : "Hear Recording"}
-                                >
-                                    {isPlayingRecording ? (
-                                        <>
-                                            <Square size={16} /> Stop Playing
-                                        </>
-                                    ) : (
-                                        <>
-                                            <Volume2 size={16} /> Hear Recording
-                                        </>
-                                    )}
-                                </button>
-                                <button
-                                    onClick={() => {
-                                        stopAudio();
-                                        setStatus('IDLE');
-                                    }}
-                                    className="flex items-center gap-2 px-5 py-2.5 bg-white border border-stone-200 rounded-lg font-bold text-sm text-stone-700 hover:bg-stone-50 hover:border-stone-300 transition-all"
-                                    aria-label="Retry"
-                                >
-                                    <RotateCcw size={16} /> Retry
-                                </button>
-                                <button
-                                    onClick={() => {
-                                        stopAudio();
-                                        if (sectionIndex < data.sections.length - 1) {
-                                            setSectionIndex(prev => prev + 1);
-                                            // setStatus('IDLE') handled by effect
-                                        } else if (onNextChapter) {
-                                            // Reset state for next chapter
-                                            // setSectionIndex(0) handled by effect on data change if parent updates data
-                                            // But if parent just changes props, we might need to trigger it.
-                                            // Actually, onNextChapter likely changes 'data' prop.
-                                            onNextChapter();
-                                        } else {
                                             setStatus('IDLE');
-                                            setEvalResult(null);
+                                        }}
+                                        className="flex items-center gap-2 px-5 py-2.5 bg-white border border-stone-200 rounded-lg font-bold text-sm text-stone-700 hover:bg-stone-50 hover:border-stone-300 transition-all"
+                                        aria-label="Retry"
+                                    >
+                                        <RotateCcw size={16} /> Retry
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            stopAudio();
+                                            if (sectionIndex < data.sections.length - 1) {
+                                                setSectionIndex(prev => prev + 1);
+                                                // setStatus('IDLE') handled by effect
+                                            } else if (onNextChapter) {
+                                                // Reset state for next chapter
+                                                // setSectionIndex(0) handled by effect on data change if parent updates data
+                                                // But if parent just changes props, we might need to trigger it.
+                                                // Actually, onNextChapter likely changes 'data' prop.
+                                                onNextChapter();
+                                            } else {
+                                                setStatus('IDLE');
+                                                setEvalResult(null);
+                                            }
+                                        }}
+                                        className="flex items-center gap-2 px-5 py-2.5 bg-stone-900 text-white rounded-lg font-bold text-sm hover:bg-black hover:scale-105 shadow-lg shadow-stone-200"
+                                        aria-label={
+                                            sectionIndex < data.sections.length - 1
+                                                ? "Next Section"
+                                                : hasNextChapter
+                                                    ? "Next Chapter"
+                                                    : "Finish"
                                         }
-                                    }}
-                                    className="flex items-center gap-2 px-5 py-2.5 bg-stone-900 text-white rounded-lg font-bold text-sm hover:bg-black hover:scale-105 shadow-lg shadow-stone-200"
-                                    aria-label={
-                                        sectionIndex < data.sections.length - 1
-                                            ? "Next Section"
-                                            : hasNextChapter
-                                                ? "Next Chapter"
-                                                : "Finish"
-                                    }
-                                >
-                                    {sectionIndex < data.sections.length - 1 ? (
-                                        <>Next <ArrowRight size={16} /></>
-                                    ) : hasNextChapter ? (
-                                        <>Next Chapter <ArrowRight size={16} /></>
-                                    ) : (
-                                        <>Finish <ArrowRight size={16} /></>
-                                    )}
-                                </button>
-                            </div>
-                        </div>
-
-                        {/* Stats Row */}
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                            {/* Overall Score */}
-                            <div className="col-span-1 flex justify-center">
-                                <ScoreGauge score={Math.round(evalResult.score)} shouldAnimate={!showCelebration} />
-                            </div>
-
-                            {/* Time Used */}
-                            <div className="bg-orange-50 rounded-2xl p-4 flex flex-col items-center justify-center border border-orange-100 h-32 w-full">
-                                <div className="text-4xl font-black text-orange-600 mb-1">
-                                    {(mode === 'vocab' ? 45 : 60) - timeLeft}s
-                                </div>
-                                <div className="text-xs font-bold text-orange-400 uppercase tracking-widest flex items-center gap-1">
-                                    <Clock size={14} /> Time Used
+                                    >
+                                        {sectionIndex < data.sections.length - 1 ? (
+                                            <>Next <ArrowRight size={16} /></>
+                                        ) : hasNextChapter ? (
+                                            <>Next Chapter <ArrowRight size={16} /></>
+                                        ) : (
+                                            <>Finish <ArrowRight size={16} /></>
+                                        )}
+                                    </button>
                                 </div>
                             </div>
 
-                            {/* Accuracy (Hidden/Extra) - Placeholder for layout balance if needed, or just keep 2 cols on mobile, 4 on desktop? 
+                            {/* Stats Row */}
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                {/* Overall Score */}
+                                {/* Overall Score & XP */}
+                                <div className="col-span-2 flex items-center justify-center gap-6 bg-white rounded-2xl p-4 border border-stone-100 shadow-sm">
+                                    <ScoreGauge score={Math.round(evalResult.score)} shouldAnimate={!showCelebration} />
+                                    <div className="flex flex-col items-start gap-1">
+                                        <div className="text-xs font-bold text-stone-400 uppercase tracking-widest">XP Earned</div>
+                                        <div className="flex items-center gap-2 text-yellow-500">
+                                            <Star size={28} fill="currentColor" className={isStarBouncing ? "animate-bounce" : ""} />
+                                            <span className="text-4xl font-black">+{xpGained}</span>
+                                        </div>
+                                        {totalPages && totalPages > 1 && (
+                                            <div className="text-xs text-stone-400 font-medium mt-1">
+                                                Section {sectionIndex + 1} of {totalPages}
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+
+                                {/* Time Used - REMOVED */}
+
+                                {/* Accuracy (Hidden/Extra) - Placeholder for layout balance if needed, or just keep 2 cols on mobile, 4 on desktop? 
                                 Let's stick to the 2 main stats for now, maybe make them wider on desktop.
                             */}
+
+                                {/* Page Progress Tracker */}
+                                {totalPages && totalPages > 1 && (
+                                    <div className="col-span-2 md:col-span-4 flex flex-col gap-2 bg-white rounded-2xl p-4 border border-stone-100 shadow-sm">
+                                        <div className="flex justify-between items-center">
+                                            <span className="text-xs font-bold text-stone-400 uppercase tracking-widest">Passage Progress</span>
+                                            <span className="text-xs font-bold text-stone-600">{Object.keys(savedPageScores || {}).length} / {totalPages} Completed</span>
+                                        </div>
+                                        <div className="flex gap-2 overflow-x-auto pb-2 no-scrollbar">
+                                            {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => {
+                                                const score = savedPageScores?.[p];
+                                                const isCurrent = p === (sectionIndex + 1);
+                                                const isDone = score !== undefined;
+
+                                                return (
+                                                    <div
+                                                        key={p}
+                                                        className={`
+                                                            flex-none w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold border
+                                                            ${isCurrent ? 'border-indigo-500 bg-indigo-50 text-indigo-700 ring-2 ring-indigo-200' : ''}
+                                                            ${!isCurrent && isDone ? (score >= 80 ? 'bg-emerald-50 border-emerald-200 text-emerald-700' : 'bg-amber-50 border-amber-200 text-amber-700') : ''}
+                                                            ${!isCurrent && !isDone ? 'bg-stone-50 border-stone-100 text-stone-300' : ''}
+                                                        `}
+                                                    >
+                                                        {isDone ? score : p}
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+
+                        {/* Scrollable Analysis */}
+                        <div className="flex-1 overflow-y-auto p-6 md:p-8 pb-20 bg-white">
+                            <div className="max-w-3xl mx-auto">
+                                <div className="flex items-center justify-center gap-2 mb-8">
+                                    <h3 className="text-xs font-bold text-stone-400 uppercase tracking-wider text-center">
+                                        Detailed Analysis
+                                    </h3>
+                                    <button
+                                        onClick={() => setShowScoringGuide(true)}
+                                        className="text-stone-300 hover:text-indigo-500 transition-colors"
+                                        title="Scoring Guide"
+                                    >
+                                        <HelpCircle size={16} />
+                                    </button>
+                                </div>
+                                <div className="flex flex-wrap justify-center gap-x-8 gap-y-6 text-3xl md:text-4xl font-serif-sc leading-loose">
+                                    {evalResult.wordEvaluations.map((word, idx) => {
+                                        const token = currentTokens[idx];
+                                        let colorClass = 'text-emerald-600'; // Default Good
+                                        let decorationClass = '';
+
+                                        // Error Type Visualization
+                                        if (word.isPunctuation) {
+                                            colorClass = 'text-stone-400';
+                                        } else if (word.errorType === 'skipped') {
+                                            colorClass = 'text-stone-300';
+                                            decorationClass = 'line-through decoration-2 decoration-stone-300';
+                                        } else if (word.errorType === 'insertion') {
+                                            colorClass = 'text-purple-500';
+                                            decorationClass = 'underline decoration-wavy decoration-purple-300';
+                                        } else if (word.errorType === 'tone') {
+                                            colorClass = 'text-orange-500';
+                                        } else if (word.errorType === 'pronunciation') {
+                                            colorClass = 'text-rose-500';
+                                        } else if (word.accuracyScore < 80) {
+                                            colorClass = 'text-amber-500';
+                                        }
+
+                                        return (
+                                            <div
+                                                key={idx}
+                                                className={`flex flex-col items-center group relative cursor-pointer transition-transform ${!word.isPunctuation ? 'hover:scale-110 active:scale-95' : ''}`}
+                                                title={word.isPunctuation ? 'Punctuation' : `Score: ${word.accuracyScore} (${word.errorType})`}
+                                                onClick={() => {
+                                                    if (!word.isPunctuation) {
+                                                        // Strip bracketed pinyin from hanzi for TTS
+                                                        const cleanHanzi = word.word.replace(/\s*\(.*?\)/, '');
+                                                        speakWord(cleanHanzi, token?.pinyin);
+                                                    }
+                                                }}
+                                            >
+                                                {/* Pinyin Display */}
+                                                {!word.isPunctuation && token && (
+                                                    <span className="text-sm text-stone-400 font-sans mb-1 opacity-70">
+                                                        {token.pinyin}
+                                                    </span>
+                                                )}
+
+                                                {/* Hanzi Display */}
+                                                <span className={`${colorClass} ${decorationClass} font-bold transition-colors drop-shadow-sm`}>
+                                                    {/* Strip bracketed pinyin for display */}
+                                                    {word.word.replace(/\s*\(.*?\)/, '')}
+                                                </span>
+
+                                                {/* Score Display (Below) */}
+                                                {!word.isPunctuation && (
+                                                    <span className={`text-[10px] font-sans font-bold mt-1 ${colorClass} opacity-80`}>
+                                                        {Math.round(word.accuracyScore)}
+                                                    </span>
+                                                )}
+
+                                                {/* Error Icon/Label */}
+                                                {(word.errorType !== 'none' || word.accuracyScore < 80) && !word.isPunctuation && (
+                                                    <span className="text-[10px] font-bold uppercase tracking-wider text-stone-400 whitespace-nowrap mt-0.5">
+                                                        {word.errorType !== 'none' ? word.errorType : 'Low Accuracy'}
+                                                    </span>
+                                                )}
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                                <p className="text-center text-stone-400 text-xs mt-8 font-medium">Click word to hear pronunciation</p>
+                            </div>
                         </div>
                     </div>
-
-                    {/* Scrollable Analysis */}
-                    <div className="flex-1 overflow-y-auto p-6 md:p-8 pb-20 bg-white">
-                        <div className="max-w-3xl mx-auto">
-                            <div className="flex items-center justify-center gap-2 mb-8">
-                                <h3 className="text-xs font-bold text-stone-400 uppercase tracking-wider text-center">
-                                    Detailed Analysis
-                                </h3>
-                                <button
-                                    onClick={() => setShowScoringGuide(true)}
-                                    className="text-stone-300 hover:text-indigo-500 transition-colors"
-                                    title="Scoring Guide"
-                                >
-                                    <HelpCircle size={16} />
+                )
+            }
+            {/* SCORING GUIDE MODAL */}
+            {
+                showScoringGuide && (
+                    <div className="absolute inset-0 z-[60] flex items-center justify-center bg-black/20 backdrop-blur-sm p-4 animate-in fade-in duration-200">
+                        <div className="bg-white rounded-3xl shadow-2xl p-6 w-full max-w-sm animate-in zoom-in-95 duration-200">
+                            <div className="flex justify-between items-center mb-6">
+                                <h3 className="text-lg font-bold text-stone-800">Scoring Guide</h3>
+                                <button onClick={() => setShowScoringGuide(false)} className="p-1 hover:bg-stone-100 rounded-full text-stone-500">
+                                    <X size={20} />
                                 </button>
                             </div>
-                            <div className="flex flex-wrap justify-center gap-x-8 gap-y-6 text-3xl md:text-4xl font-serif-sc leading-loose">
-                                {evalResult.wordEvaluations.map((word, idx) => {
-                                    const token = currentTokens[idx];
-                                    let colorClass = 'text-emerald-600'; // Default Good
-                                    let decorationClass = '';
 
-                                    // Error Type Visualization
-                                    if (word.isPunctuation) {
-                                        colorClass = 'text-stone-400';
-                                    } else if (word.errorType === 'skipped') {
-                                        colorClass = 'text-stone-300';
-                                        decorationClass = 'line-through decoration-2 decoration-stone-300';
-                                    } else if (word.errorType === 'insertion') {
-                                        colorClass = 'text-purple-500';
-                                        decorationClass = 'underline decoration-wavy decoration-purple-300';
-                                    } else if (word.errorType === 'tone') {
-                                        colorClass = 'text-orange-500';
-                                    } else if (word.errorType === 'pronunciation') {
-                                        colorClass = 'text-rose-500';
-                                    } else if (word.accuracyScore < 80) {
-                                        colorClass = 'text-amber-500';
-                                    }
+                            <div className="space-y-4">
+                                <div className="flex items-start gap-3">
+                                    <div className="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold text-sm flex-none">
+                                        90+
+                                    </div>
+                                    <div>
+                                        <div className="font-bold text-stone-800">Excellent</div>
+                                        <p className="text-xs text-stone-500 leading-relaxed">Native-like pronunciation and tone.</p>
+                                    </div>
+                                </div>
 
-                                    return (
-                                        <div
-                                            key={idx}
-                                            className={`flex flex-col items-center group relative cursor-pointer transition-transform ${!word.isPunctuation ? 'hover:scale-110 active:scale-95' : ''}`}
-                                            title={word.isPunctuation ? 'Punctuation' : `Score: ${word.accuracyScore} (${word.errorType})`}
-                                            onClick={() => !word.isPunctuation && speakWord(word.word)}
-                                        >
-                                            {/* Pinyin Display */}
-                                            {!word.isPunctuation && token && (
-                                                <span className="text-sm text-stone-400 font-sans mb-1 opacity-70">
-                                                    {token.pinyin}
-                                                </span>
-                                            )}
+                                <div className="flex items-start gap-3">
+                                    <div className="w-8 h-8 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center font-bold text-sm flex-none">
+                                        Low
+                                    </div>
+                                    <div>
+                                        <div className="font-bold text-stone-800">Low Accuracy</div>
+                                        <p className="text-xs text-stone-500 leading-relaxed">
+                                            The word was recognized, but the pronunciation was fuzzy or not clear enough.
+                                        </p>
+                                    </div>
+                                </div>
 
-                                            {/* Hanzi Display */}
-                                            <span className={`${colorClass} ${decorationClass} font-bold transition-colors drop-shadow-sm`}>
-                                                {word.word}
-                                            </span>
+                                <div className="flex items-start gap-3">
+                                    <div className="w-8 h-8 rounded-lg bg-orange-100 text-orange-600 flex items-center justify-center font-bold text-sm flex-none">
+                                        Tone
+                                    </div>
+                                    <div>
+                                        <div className="font-bold text-stone-800">Tone Error</div>
+                                        <p className="text-xs text-stone-500 leading-relaxed">
+                                            The pinyin was correct, but the wrong tone was used (e.g., mā vs má).
+                                        </p>
+                                    </div>
+                                </div>
 
-                                            {/* Score Display (Below) */}
-                                            {!word.isPunctuation && (
-                                                <span className={`text-[10px] font-sans font-bold mt-1 ${colorClass} opacity-80`}>
-                                                    {Math.round(word.accuracyScore)}
-                                                </span>
-                                            )}
+                                <div className="flex items-start gap-3">
+                                    <div className="w-8 h-8 rounded-lg bg-rose-100 text-rose-600 flex items-center justify-center font-bold text-sm flex-none">
+                                        Pron
+                                    </div>
+                                    <div>
+                                        <div className="font-bold text-stone-800">Pronunciation Error</div>
+                                        <p className="text-xs text-stone-500 leading-relaxed">
+                                            The wrong sound was used (e.g., zh vs z, or completely wrong vowel).
+                                        </p>
+                                    </div>
+                                </div>
 
-                                            {/* Error Icon/Label */}
-                                            {(word.errorType !== 'none' || word.accuracyScore < 80) && !word.isPunctuation && (
-                                                <span className="text-[10px] font-bold uppercase tracking-wider text-stone-400 whitespace-nowrap mt-0.5">
-                                                    {word.errorType !== 'none' ? word.errorType : 'Low Accuracy'}
-                                                </span>
-                                            )}
-                                        </div>
-                                    );
-                                })}
+                                <div className="flex items-start gap-3">
+                                    <div className="w-8 h-8 rounded-lg bg-stone-100 text-stone-400 flex items-center justify-center font-bold text-sm flex-none">
+                                        Skip
+                                    </div>
+                                    <div>
+                                        <div className="font-bold text-stone-800">Skipped</div>
+                                        <p className="text-xs text-stone-500 leading-relaxed">
+                                            The word was not detected in the recording.
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
-                            <p className="text-center text-stone-400 text-xs mt-8 font-medium">Click word to hear pronunciation</p>
-                        </div>
-                    </div>
-                </div>
-            )}
-            {/* SCORING GUIDE MODAL */}
-            {showScoringGuide && (
-                <div className="absolute inset-0 z-[60] flex items-center justify-center bg-black/20 backdrop-blur-sm p-4 animate-in fade-in duration-200">
-                    <div className="bg-white rounded-3xl shadow-2xl p-6 w-full max-w-sm animate-in zoom-in-95 duration-200">
-                        <div className="flex justify-between items-center mb-6">
-                            <h3 className="text-lg font-bold text-stone-800">Scoring Guide</h3>
-                            <button onClick={() => setShowScoringGuide(false)} className="p-1 hover:bg-stone-100 rounded-full text-stone-500">
-                                <X size={20} />
+
+                            <button
+                                onClick={() => setShowScoringGuide(false)}
+                                className="w-full mt-6 py-3 bg-stone-100 hover:bg-stone-200 text-stone-600 font-bold rounded-xl transition-colors"
+                            >
+                                Got it
                             </button>
                         </div>
-
-                        <div className="space-y-4">
-                            <div className="flex items-start gap-3">
-                                <div className="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold text-sm flex-none">
-                                    90+
-                                </div>
-                                <div>
-                                    <div className="font-bold text-stone-800">Excellent</div>
-                                    <p className="text-xs text-stone-500 leading-relaxed">Native-like pronunciation and tone.</p>
-                                </div>
-                            </div>
-
-                            <div className="flex items-start gap-3">
-                                <div className="w-8 h-8 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center font-bold text-sm flex-none">
-                                    Low
-                                </div>
-                                <div>
-                                    <div className="font-bold text-stone-800">Low Accuracy</div>
-                                    <p className="text-xs text-stone-500 leading-relaxed">
-                                        The word was recognized, but the pronunciation was fuzzy or not clear enough.
-                                    </p>
-                                </div>
-                            </div>
-
-                            <div className="flex items-start gap-3">
-                                <div className="w-8 h-8 rounded-lg bg-orange-100 text-orange-600 flex items-center justify-center font-bold text-sm flex-none">
-                                    Tone
-                                </div>
-                                <div>
-                                    <div className="font-bold text-stone-800">Tone Error</div>
-                                    <p className="text-xs text-stone-500 leading-relaxed">
-                                        The pinyin was correct, but the wrong tone was used (e.g., mā vs má).
-                                    </p>
-                                </div>
-                            </div>
-
-                            <div className="flex items-start gap-3">
-                                <div className="w-8 h-8 rounded-lg bg-rose-100 text-rose-600 flex items-center justify-center font-bold text-sm flex-none">
-                                    Pron
-                                </div>
-                                <div>
-                                    <div className="font-bold text-stone-800">Pronunciation Error</div>
-                                    <p className="text-xs text-stone-500 leading-relaxed">
-                                        The wrong sound was used (e.g., zh vs z, or completely wrong vowel).
-                                    </p>
-                                </div>
-                            </div>
-
-                            <div className="flex items-start gap-3">
-                                <div className="w-8 h-8 rounded-lg bg-stone-100 text-stone-400 flex items-center justify-center font-bold text-sm flex-none">
-                                    Skip
-                                </div>
-                                <div>
-                                    <div className="font-bold text-stone-800">Skipped</div>
-                                    <p className="text-xs text-stone-500 leading-relaxed">
-                                        The word was not detected in the recording.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <button
-                            onClick={() => setShowScoringGuide(false)}
-                            className="w-full mt-6 py-3 bg-stone-100 hover:bg-stone-200 text-stone-600 font-bold rounded-xl transition-colors"
-                        >
-                            Got it
-                        </button>
                     </div>
-                </div>
-            )}
-        </div>
+                )
+            }
+        </div >
     );
 };
 

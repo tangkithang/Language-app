@@ -8,18 +8,26 @@ export const evaluatePronunciation = async (
     audioBlob: Blob,
     targetText: string,
     referenceWords?: string[],
-    referencePinyin?: string[]
+    referencePinyin?: string[],
+    scoringWeights?: {
+        accuracy: number;
+        fluency: number;
+        completeness: number;
+        prosody: number;
+        wordThreshold?: number; // New: Threshold for marking a word as correct
+    }
 ): Promise<PronunciationResult> => {
     return new Promise(async (resolve, reject) => {
         try {
             // Create speech configuration
             const speechConfig = sdk.SpeechConfig.fromSubscription(subscriptionKey, serviceRegion);
-            speechConfig.speechRecognitionLanguage = 'zh-CN';
             // Set timeouts to prevent premature stopping
             // Initial silence: 10s to wait for user to start speaking
             // End silence: 15s to allow natural pauses during long readings
             speechConfig.setProperty(sdk.PropertyId.SpeechServiceConnection_InitialSilenceTimeoutMs, "10000");
             speechConfig.setProperty(sdk.PropertyId.SpeechServiceConnection_EndSilenceTimeoutMs, "15000");
+            // Segmentation silence: 5s (default is often lower) to allow slow reading without breaking sentences
+            speechConfig.setProperty(sdk.PropertyId.Speech_SegmentationSilenceTimeoutMs, "5000");
 
             // Create pronunciation assessment config
             const pronunciationConfig = new sdk.PronunciationAssessmentConfig(
@@ -29,7 +37,7 @@ export const evaluatePronunciation = async (
                 true
             );
             pronunciationConfig.enableProsodyAssessment = true;
-            pronunciationConfig.phonemeAlphabet = "IPA";
+            pronunciationConfig.phonemeAlphabet = "SAPI"; // Use SAPI to get Pinyin-like phonemes if possible, or IPA
 
             // Convert WebM Blob to PCM (16kHz, 16-bit, mono)
             const audioContext = new AudioContext();
@@ -71,11 +79,24 @@ export const evaluatePronunciation = async (
                         const completenessScore = pronunciationResult.completenessScore;
                         const prosodyScore = pronunciationResult.prosodyScore || 0;
 
+                        // Custom Weighted Score
+                        // Use provided weights or default to Accuracy-focused for Tutor Context
+                        const weights = scoringWeights || {
+                            accuracy: 0.8,
+                            fluency: 0,
+                            completeness: 0.2,
+                            prosody: 0
+                        };
+
+                        // Normalize weights to ensure they sum to 1 (just in case)
+                        const totalWeight = weights.accuracy + weights.fluency + weights.completeness + weights.prosody;
+                        const norm = totalWeight > 0 ? totalWeight : 1;
+
                         const overallScore = Math.round(
-                            accuracyScore * 0.4 +
-                            fluencyScore * 0.3 +
-                            completenessScore * 0.2 +
-                            prosodyScore * 0.1
+                            (accuracyScore * weights.accuracy +
+                                fluencyScore * weights.fluency +
+                                completenessScore * weights.completeness +
+                                prosodyScore * weights.prosody) / norm
                         );
 
                         const wordEvaluations: WordEvaluation[] = [];
@@ -192,7 +213,7 @@ export const evaluatePronunciation = async (
                                 isCorrect: (p.PronunciationAssessment?.AccuracyScore || 0) >= 80
                             }));
 
-                            // PINYIN PRIORITY LOGIC
+                            // PINYIN PRIORITY LOGIC (Client-Side Override)
                             // If we have reference pinyin and there's a tone or pronunciation error,
                             // check if the user actually said the correct pinyin (for polyphonic characters)
                             if (referencePinyin && (vocabErrorType === 'tone' || vocabErrorType === 'pronunciation')) {
@@ -200,7 +221,7 @@ export const evaluatePronunciation = async (
                                 if (segmentIndex < referencePinyin.length) {
                                     const expectedPinyin = referencePinyin[segmentIndex];
 
-                                    // Extract tone number from expected pinyin (e.g., "wéi" -> 2, "wèi" -> 4)
+                                    // Extract tone number from expected pinyin (e.g., "wéi" -> 2, "wèi" -> 4, "de" -> 5)
                                     const toneMap: { [key: string]: string } = {
                                         'ā': '1', 'á': '2', 'ǎ': '3', 'à': '4',
                                         'ē': '1', 'é': '2', 'ě': '3', 'è': '4',
@@ -210,7 +231,7 @@ export const evaluatePronunciation = async (
                                         'ǖ': '1', 'ǘ': '2', 'ǚ': '3', 'ǜ': '4'
                                     };
 
-                                    let expectedTone = '5'; // Default to neutral tone
+                                    let expectedTone = '5'; // Default to neutral tone (5) if no mark found
                                     for (const char of expectedPinyin) {
                                         if (toneMap[char]) {
                                             expectedTone = toneMap[char];
@@ -219,11 +240,16 @@ export const evaluatePronunciation = async (
                                     }
 
                                     // Check if any phoneme in the recognized speech has this tone
-                                    const hasExpectedTone = allPhonemes.some(p => p.phoneme === expectedTone);
+                                    // SAPI phonemes often include tone numbers (e.g., "ni3", "hao3")
+                                    const hasExpectedTone = allPhonemes.some(p => p.phoneme.includes(expectedTone));
 
                                     // If the user said the expected tone, override the error
-                                    // Also check if accuracy is reasonably high (>= 70) to avoid false positives
-                                    if (hasExpectedTone && avgAccuracy >= 70) {
+                                    // Use the user's configured wordThreshold (or default 80) but lower it slightly (e.g. * 0.6)
+                                    // because if Azure expected a different word, the accuracy score is naturally lower.
+                                    // We want to catch "Right Tone, Wrong Word" scenarios.
+                                    const overrideThreshold = (scoringWeights?.wordThreshold ?? 80) * 0.6;
+
+                                    if (hasExpectedTone && avgAccuracy >= overrideThreshold) {
                                         vocabErrorType = 'none';
                                     }
                                 }
@@ -255,9 +281,12 @@ export const evaluatePronunciation = async (
                                 }
                             });
 
+                            // Use custom threshold or default to 80
+                            const threshold = scoringWeights?.wordThreshold ?? 80;
+
                             wordEvaluations.push({
                                 word: vocabWord,
-                                correct: avgAccuracy >= 80 && vocabErrorType === 'none',
+                                correct: avgAccuracy >= threshold && vocabErrorType === 'none',
                                 errorType: vocabErrorType,
                                 accuracyScore: avgAccuracy,
                                 phonemes: allPhonemes,
@@ -266,13 +295,12 @@ export const evaluatePronunciation = async (
                         }
 
                         let comment = '';
-                        if (overallScore >= 90) comment = '非常優秀！您的發音準確，語調自然，流暢度極佳。';
-                        else if (overallScore >= 80) comment = '很好！發音基本準確，但有少數字詞的聲調需要改進。';
-                        else if (overallScore >= 70) comment = '不錯！但有些字詞的發音和聲調需要多加練習。';
-                        else if (overallScore >= 60) comment = '尚可。建議多聽標準發音，特別注意聲調變化。';
-                        else comment = '需要加強練習。請仔細聽示範發音，注意每個字的聲調和發音方式。';
+                        if (overallScore >= 90) comment = '非常優秀！您的發音非常準確。';
+                        else if (overallScore >= 80) comment = '很好！發音基本準確，繼續保持。';
+                        else if (overallScore >= 70) comment = '不錯！但有些字詞的聲調需要多加練習。';
+                        else if (overallScore >= 60) comment = '尚可。建議多聽示範發音，注意聲調。';
+                        else comment = '需要加強練習。請仔細聽示範發音，模仿每個字的讀音。';
 
-                        if (prosodyScore < 60) comment += ' 特別注意聲調的準確性。';
                         if (completenessScore < 80) comment += ' 請確保完整讀出所有文字。';
 
                         resolve({
@@ -307,8 +335,9 @@ export const playTTS = (
     text: string,
     subscriptionKey: string,
     serviceRegion: string,
-    pinyinText?: string,
-    onBoundary?: (e: sdk.SpeechSynthesisWordBoundaryEventArgs) => void
+    pinyinData?: string | { word: string; pinyin: string }[],
+    onBoundary?: (e: sdk.SpeechSynthesisWordBoundaryEventArgs) => void,
+    rate: number = 1.0
 ): sdk.SpeechSynthesizer => {
     let synthesizer: sdk.SpeechSynthesizer;
     try {
@@ -320,48 +349,58 @@ export const playTTS = (
             synthesizer.wordBoundary = (_, e) => onBoundary(e);
         }
 
-        if (pinyinText) {
-            // Use SSML to force pronunciation using pinyin
-            const ssml = `
-                <speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="zh-CN">
-                    <voice name="zh-CN-XiaoxiaoNeural">
-                        <phoneme alphabet="x-microsoft-pinyin" ph="${pinyinText}">${text}</phoneme>
-                    </voice>
-                </speak>`;
+        // Convert rate to percentage string for SSML
+        // e.g. 1.0 -> "+0%", 0.8 -> "-20%", 1.2 -> "+20%"
+        const ratePct = Math.round((rate - 1) * 100);
+        const rateStr = `${ratePct >= 0 ? '+' : ''}${ratePct}%`;
 
-            synthesizer.speakSsmlAsync(
-                ssml,
-                (result) => {
-                    if (result.reason === sdk.ResultReason.SynthesizingAudioCompleted) {
-                        // Success
-                    } else {
-                        console.error("TTS SSML Error:", result.errorDetails);
+        let ssmlBody = '';
+
+        if (pinyinData) {
+            if (Array.isArray(pinyinData)) {
+                // Construct SSML from array of words and pinyin
+                ssmlBody = pinyinData.map(item => {
+                    // If pinyin is provided and valid, use phoneme tag
+                    if (item.pinyin && item.pinyin.trim()) {
+                        return `<phoneme alphabet="x-microsoft-pinyin" ph="${item.pinyin}">${item.word}</phoneme>`;
                     }
-                    synthesizer.close();
-                },
-                (error) => {
-                    console.error("TTS SSML Error:", error);
-                    synthesizer.close();
-                }
-            );
+                    // Otherwise just the text
+                    return item.word;
+                }).join('');
+            } else {
+                // Single string pinyin for the whole text
+                ssmlBody = `<phoneme alphabet="x-microsoft-pinyin" ph="${pinyinData}">${text}</phoneme>`;
+            }
         } else {
-            // Standard text synthesis
-            synthesizer.speakTextAsync(
-                text,
-                (result) => {
-                    if (result.reason === sdk.ResultReason.SynthesizingAudioCompleted) {
-                        // Success
-                    } else {
-                        console.error("TTS Error:", result.errorDetails);
-                    }
-                    synthesizer.close();
-                },
-                (error) => {
-                    console.error("TTS Error:", error);
-                    synthesizer.close();
-                }
-            );
+            // Standard text
+            ssmlBody = text;
         }
+
+        const ssml = `
+            <speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="zh-CN">
+                <voice name="zh-CN-XiaoxiaoNeural">
+                    <prosody rate="${rateStr}">
+                        ${ssmlBody}
+                    </prosody>
+                </voice>
+            </speak>`;
+
+        synthesizer.speakSsmlAsync(
+            ssml,
+            (result) => {
+                if (result.reason === sdk.ResultReason.SynthesizingAudioCompleted) {
+                    // Success
+                } else {
+                    console.error("TTS SSML Error:", result.errorDetails);
+                }
+                synthesizer.close();
+            },
+            (error) => {
+                console.error("TTS SSML Error:", error);
+                synthesizer.close();
+            }
+        );
+
         return synthesizer;
     } catch (error) {
         console.error("TTS Init Error:", error);
