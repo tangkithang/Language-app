@@ -41,25 +41,20 @@ const generateData = () => {
                         }
                     });
 
-                    // Split into chunks of 10
-                    const chunks = [];
-                    for (let i = 0; i < sentences.length; i += 10) {
-                        chunks.push(sentences.slice(i, i + 10));
-                    }
-
-                    return chunks.map((chunk, chunkIdx) => ({
-                        id: `unit-${partIdx + 1}-${unitIdx + 1}-${chunkIdx + 1}`,
-                        title: `${unit.title} ${chunks.length > 1 ? `(Part ${chunkIdx + 1})` : ''}`,
+                    // Create one chapter per unit containing all sentences
+                    return [{
+                        id: `unit-${partIdx + 1}-${unitIdx + 1}`,
+                        title: unit.title,
                         content: {
-                            title: `${unit.title} ${chunks.length > 1 ? `(${chunkIdx + 1})` : ''}`,
+                            title: unit.title,
                             sections: [
                                 {
                                     speaker: "Vocabulary Practice",
-                                    sentences: chunk
+                                    sentences: sentences
                                 }
                             ]
                         }
-                    }));
+                    }];
                 }).flat()
             };
         });

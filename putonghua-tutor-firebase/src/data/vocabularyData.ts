@@ -18,16 +18,16 @@ export const VOCAB_COURSE: CoursePart[] = [
         "title": "Part 1: Pronunciation Focus (語音針對性練習)",
         "chapters": [
             {
-                "id": "unit-1-1-1",
-                "title": "1. Front/Back Nasal & Tones (前後鼻音與聲調) (Part 1)",
+                "id": "unit-1-1",
+                "title": "1. Front/Back Nasal & Tones (前後鼻音與聲調)",
                 "content": {
-                    "title": "1. Front/Back Nasal & Tones (前後鼻音與聲調) (1)",
+                    "title": "1. Front/Back Nasal & Tones (前後鼻音與聲調)",
                     "sections": [
                         {
                             "speaker": "Vocabulary Practice",
                             "sentences": [
                                 {
-                                    "id": "33mpzsww6",
+                                    "id": "7klhmjmxm",
                                     "original": "適應，",
                                     "tokens": [
                                         {
@@ -41,7 +41,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "psk45377q",
+                                    "id": "ghiumiigs",
                                     "original": "行程，",
                                     "tokens": [
                                         {
@@ -55,7 +55,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "rodi3xjpx",
+                                    "id": "bwnme7l4o",
                                     "original": "平常，",
                                     "tokens": [
                                         {
@@ -69,7 +69,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "4dbpngr8r",
+                                    "id": "ifc65ao7l",
                                     "original": "晚上，",
                                     "tokens": [
                                         {
@@ -83,7 +83,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "nvu4qjivh",
+                                    "id": "gmao2mjt9",
                                     "original": "上網，",
                                     "tokens": [
                                         {
@@ -97,7 +97,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "htbezkgey",
+                                    "id": "cbt090jy7",
                                     "original": "環境，",
                                     "tokens": [
                                         {
@@ -111,7 +111,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "oz6m8qupr",
+                                    "id": "9lwiand9j",
                                     "original": "成本，",
                                     "tokens": [
                                         {
@@ -125,7 +125,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "qkbzzn4oh",
+                                    "id": "sxdrsile0",
                                     "original": "一定，",
                                     "tokens": [
                                         {
@@ -139,7 +139,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "4hz8dss6j",
+                                    "id": "7i44kxvqc",
                                     "original": "當然，",
                                     "tokens": [
                                         {
@@ -153,7 +153,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "ovf2vhk0q",
+                                    "id": "tpp5ud2yb",
                                     "original": "研究生，",
                                     "tokens": [
                                         {
@@ -165,23 +165,9 @@ export const VOCAB_COURSE: CoursePart[] = [
                                             "pinyin": ""
                                         }
                                     ]
-                                }
-                            ]
-                        }
-                    ]
-                }
-            },
-            {
-                "id": "unit-1-1-2",
-                "title": "1. Front/Back Nasal & Tones (前後鼻音與聲調) (Part 2)",
-                "content": {
-                    "title": "1. Front/Back Nasal & Tones (前後鼻音與聲調) (2)",
-                    "sections": [
-                        {
-                            "speaker": "Vocabulary Practice",
-                            "sentences": [
+                                },
                                 {
-                                    "id": "06v768u3a",
+                                    "id": "7p846w5d9",
                                     "original": "研究，",
                                     "tokens": [
                                         {
@@ -195,7 +181,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "86atao1g7",
+                                    "id": "1tpdfar1d",
                                     "original": "畢業，",
                                     "tokens": [
                                         {
@@ -209,7 +195,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "nf7auukh4",
+                                    "id": "gadol3o94",
                                     "original": "金錢，",
                                     "tokens": [
                                         {
@@ -223,7 +209,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "3mms1xqr4",
+                                    "id": "woa94kwwa",
                                     "original": "攢錢，",
                                     "tokens": [
                                         {
@@ -237,7 +223,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "c14l3j2c1",
+                                    "id": "mkwh36c9s",
                                     "original": "省錢，",
                                     "tokens": [
                                         {
@@ -251,7 +237,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "pfe41r3ye",
+                                    "id": "pvmak8y1h",
                                     "original": "賺錢，",
                                     "tokens": [
                                         {
@@ -265,7 +251,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "wayixmlh1",
+                                    "id": "iyyqmsjys",
                                     "original": "掙錢，",
                                     "tokens": [
                                         {
@@ -279,7 +265,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "y3r1rm5tg",
+                                    "id": "6hqovnxdv",
                                     "original": "有錢，",
                                     "tokens": [
                                         {
@@ -293,7 +279,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "a007w69lg",
+                                    "id": "9pxnw93k2",
                                     "original": "要錢，",
                                     "tokens": [
                                         {
@@ -307,7 +293,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "bpje5lgio",
+                                    "id": "afjhyrlnp",
                                     "original": "花錢，",
                                     "tokens": [
                                         {
@@ -319,23 +305,9 @@ export const VOCAB_COURSE: CoursePart[] = [
                                             "pinyin": ""
                                         }
                                     ]
-                                }
-                            ]
-                        }
-                    ]
-                }
-            },
-            {
-                "id": "unit-1-1-3",
-                "title": "1. Front/Back Nasal & Tones (前後鼻音與聲調) (Part 3)",
-                "content": {
-                    "title": "1. Front/Back Nasal & Tones (前後鼻音與聲調) (3)",
-                    "sections": [
-                        {
-                            "speaker": "Vocabulary Practice",
-                            "sentences": [
+                                },
                                 {
-                                    "id": "g713poe0j",
+                                    "id": "mfj1atttk",
                                     "original": "促銷，",
                                     "tokens": [
                                         {
@@ -349,7 +321,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "71osmzh09",
+                                    "id": "aob82zpgr",
                                     "original": "教室，",
                                     "tokens": [
                                         {
@@ -363,7 +335,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "nf7q4qrvx",
+                                    "id": "8l7bcq56v",
                                     "original": "教小朋友，",
                                     "tokens": [
                                         {
@@ -377,7 +349,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "08gia3riq",
+                                    "id": "ijvl8w3la",
                                     "original": "教育，",
                                     "tokens": [
                                         {
@@ -396,16 +368,16 @@ export const VOCAB_COURSE: CoursePart[] = [
                 }
             },
             {
-                "id": "unit-1-2-1",
-                "title": "2. Initials (聲母辨析) (Part 1)",
+                "id": "unit-1-2",
+                "title": "2. Initials (聲母辨析)",
                 "content": {
-                    "title": "2. Initials (聲母辨析) (1)",
+                    "title": "2. Initials (聲母辨析)",
                     "sections": [
                         {
                             "speaker": "Vocabulary Practice",
                             "sentences": [
                                 {
-                                    "id": "svfdn5v85",
+                                    "id": "p7ec6i1v2",
                                     "original": "想像，",
                                     "tokens": [
                                         {
@@ -419,7 +391,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "wfiyfu2ej",
+                                    "id": "dwdrhjbkf",
                                     "original": "利息，",
                                     "tokens": [
                                         {
@@ -433,7 +405,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "lyk4xd1jx",
+                                    "id": "0bthfwc28",
                                     "original": "時薪，",
                                     "tokens": [
                                         {
@@ -447,7 +419,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "lz4y0atwj",
+                                    "id": "gwab62p89",
                                     "original": "性格，",
                                     "tokens": [
                                         {
@@ -461,7 +433,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "p883x2dqm",
+                                    "id": "01147akha",
                                     "original": "介紹，",
                                     "tokens": [
                                         {
@@ -475,7 +447,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "sktnu7u52",
+                                    "id": "6kf51t84c",
                                     "original": "燒烤，",
                                     "tokens": [
                                         {
@@ -489,7 +461,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "mpjztaeu9",
+                                    "id": "57mrvkkn4",
                                     "original": "大廈，",
                                     "tokens": [
                                         {
@@ -503,7 +475,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "yt24r74s7",
+                                    "id": "crqr2zu1e",
                                     "original": "不少，",
                                     "tokens": [
                                         {
@@ -517,7 +489,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "1m950vlf4",
+                                    "id": "8dfth4rkw",
                                     "original": "不小，",
                                     "tokens": [
                                         {
@@ -531,7 +503,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "x41jnt3mw",
+                                    "id": "j830md88z",
                                     "original": "上來，",
                                     "tokens": [
                                         {
@@ -543,23 +515,9 @@ export const VOCAB_COURSE: CoursePart[] = [
                                             "pinyin": ""
                                         }
                                     ]
-                                }
-                            ]
-                        }
-                    ]
-                }
-            },
-            {
-                "id": "unit-1-2-2",
-                "title": "2. Initials (聲母辨析) (Part 2)",
-                "content": {
-                    "title": "2. Initials (聲母辨析) (2)",
-                    "sections": [
-                        {
-                            "speaker": "Vocabulary Practice",
-                            "sentences": [
+                                },
                                 {
-                                    "id": "l1k61egl5",
+                                    "id": "v701lxv81",
                                     "original": "下來，",
                                     "tokens": [
                                         {
@@ -573,7 +531,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "s8p6haxk6",
+                                    "id": "fnnrkabnk",
                                     "original": "消費，",
                                     "tokens": [
                                         {
@@ -587,7 +545,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "l8ft5s4lb",
+                                    "id": "f5vcvuzae",
                                     "original": "花費，",
                                     "tokens": [
                                         {
@@ -601,7 +559,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "93nus0pxx",
+                                    "id": "0510cpo9q",
                                     "original": "吃飯，",
                                     "tokens": [
                                         {
@@ -615,7 +573,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "lmnf8j8dx",
+                                    "id": "569h4mqle",
                                     "original": "況且，",
                                     "tokens": [
                                         {
@@ -629,7 +587,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "dk8cluqw4",
+                                    "id": "gm3obrprr",
                                     "original": "有空兒，",
                                     "tokens": [
                                         {
@@ -643,7 +601,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "dfu8klul6",
+                                    "id": "twk8qvlew",
                                     "original": "速食，",
                                     "tokens": [
                                         {
@@ -657,7 +615,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "0ragxr19z",
+                                    "id": "k622j916v",
                                     "original": "壞餐，",
                                     "tokens": [
                                         {
@@ -671,7 +629,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "cbnpbgtbu",
+                                    "id": "fnppmz2nq",
                                     "original": "為了，",
                                     "tokens": [
                                         {
@@ -685,7 +643,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "0248k5wwj",
+                                    "id": "at3h36pux",
                                     "original": "位於，",
                                     "tokens": [
                                         {
@@ -697,23 +655,9 @@ export const VOCAB_COURSE: CoursePart[] = [
                                             "pinyin": ""
                                         }
                                     ]
-                                }
-                            ]
-                        }
-                    ]
-                }
-            },
-            {
-                "id": "unit-1-2-3",
-                "title": "2. Initials (聲母辨析) (Part 3)",
-                "content": {
-                    "title": "2. Initials (聲母辨析) (3)",
-                    "sections": [
-                        {
-                            "speaker": "Vocabulary Practice",
-                            "sentences": [
+                                },
                                 {
-                                    "id": "0b7ngg44p",
+                                    "id": "gttfemkql",
                                     "original": "惠，",
                                     "tokens": [
                                         {
@@ -732,16 +676,16 @@ export const VOCAB_COURSE: CoursePart[] = [
                 }
             },
             {
-                "id": "unit-1-3-1",
-                "title": "3. Finals (韻母辨析) ",
+                "id": "unit-1-3",
+                "title": "3. Finals (韻母辨析)",
                 "content": {
-                    "title": "3. Finals (韻母辨析) ",
+                    "title": "3. Finals (韻母辨析)",
                     "sections": [
                         {
                             "speaker": "Vocabulary Practice",
                             "sentences": [
                                 {
-                                    "id": "9qypvbpqq",
+                                    "id": "pfslcrm37",
                                     "original": "賺錢，",
                                     "tokens": [
                                         {
@@ -755,7 +699,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "vi1ssxtnn",
+                                    "id": "bcybhs4ue",
                                     "original": "撞錢，",
                                     "tokens": [
                                         {
@@ -769,7 +713,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "rq3b7qbrz",
+                                    "id": "w4s43ldvo",
                                     "original": "都市，",
                                     "tokens": [
                                         {
@@ -783,7 +727,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "07a5h0lzv",
+                                    "id": "2tcua4vm5",
                                     "original": "要，",
                                     "tokens": [
                                         {
@@ -797,7 +741,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "cxoa7pxf4",
+                                    "id": "6yxjcfk1g",
                                     "original": "有，",
                                     "tokens": [
                                         {
@@ -811,7 +755,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "5ax467g7t",
+                                    "id": "ly0p4zv8f",
                                     "original": "肉，",
                                     "tokens": [
                                         {
@@ -825,7 +769,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "o4bg0fj6d",
+                                    "id": "mpygfuzu5",
                                     "original": "樓，",
                                     "tokens": [
                                         {
@@ -844,16 +788,16 @@ export const VOCAB_COURSE: CoursePart[] = [
                 }
             },
             {
-                "id": "unit-1-4-1",
-                "title": "4. Neutral Tone (輕聲詞) (Part 1)",
+                "id": "unit-1-4",
+                "title": "4. Neutral Tone (輕聲詞)",
                 "content": {
-                    "title": "4. Neutral Tone (輕聲詞) (1)",
+                    "title": "4. Neutral Tone (輕聲詞)",
                     "sections": [
                         {
                             "speaker": "Vocabulary Practice",
                             "sentences": [
                                 {
-                                    "id": "lva67kgil",
+                                    "id": "u4gvkzixl",
                                     "original": "清楚，",
                                     "tokens": [
                                         {
@@ -867,7 +811,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "e4av9jrdt",
+                                    "id": "q98cmrvrw",
                                     "original": "先生，",
                                     "tokens": [
                                         {
@@ -881,7 +825,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "v90hhnuq2",
+                                    "id": "q9oaabr3o",
                                     "original": "東西，",
                                     "tokens": [
                                         {
@@ -895,7 +839,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "1jgj7cwg7",
+                                    "id": "v3i8l5gx7",
                                     "original": "關係，",
                                     "tokens": [
                                         {
@@ -909,7 +853,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "6q0ejtt3w",
+                                    "id": "sxooledt4",
                                     "original": "生意，",
                                     "tokens": [
                                         {
@@ -923,7 +867,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "ruvlpne7a",
+                                    "id": "raohz61ab",
                                     "original": "衣服，",
                                     "tokens": [
                                         {
@@ -937,7 +881,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "jxbl7hwab",
+                                    "id": "zzmy22o5t",
                                     "original": "商量，",
                                     "tokens": [
                                         {
@@ -951,7 +895,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "l4yb2vmq8",
+                                    "id": "c9i81n2pe",
                                     "original": "知識，",
                                     "tokens": [
                                         {
@@ -965,7 +909,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "hphtbnzmj",
+                                    "id": "btnd6iclk",
                                     "original": "什麼，",
                                     "tokens": [
                                         {
@@ -979,7 +923,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "fer075sc1",
+                                    "id": "z4qg3ekxf",
                                     "original": "麻煩，",
                                     "tokens": [
                                         {
@@ -991,23 +935,9 @@ export const VOCAB_COURSE: CoursePart[] = [
                                             "pinyin": ""
                                         }
                                     ]
-                                }
-                            ]
-                        }
-                    ]
-                }
-            },
-            {
-                "id": "unit-1-4-2",
-                "title": "4. Neutral Tone (輕聲詞) (Part 2)",
-                "content": {
-                    "title": "4. Neutral Tone (輕聲詞) (2)",
-                    "sections": [
-                        {
-                            "speaker": "Vocabulary Practice",
-                            "sentences": [
+                                },
                                 {
-                                    "id": "88mgtfcfg",
+                                    "id": "j2dex8r7m",
                                     "original": "名字，",
                                     "tokens": [
                                         {
@@ -1021,7 +951,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "ep84177kd",
+                                    "id": "gxv2gir6s",
                                     "original": "孩子，",
                                     "tokens": [
                                         {
@@ -1035,7 +965,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "gq04swa31",
+                                    "id": "40lpuduqf",
                                     "original": "朋友，",
                                     "tokens": [
                                         {
@@ -1049,7 +979,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "8wnaon7yh",
+                                    "id": "hkmmtjysb",
                                     "original": "便宜，",
                                     "tokens": [
                                         {
@@ -1063,7 +993,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "m44ga6qtg",
+                                    "id": "isc8szm11",
                                     "original": "除了，",
                                     "tokens": [
                                         {
@@ -1077,7 +1007,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "oi001y06n",
+                                    "id": "b9fdk1jnb",
                                     "original": "時候，",
                                     "tokens": [
                                         {
@@ -1091,7 +1021,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "bktncwzkw",
+                                    "id": "n0tg768es",
                                     "original": "謝謝，",
                                     "tokens": [
                                         {
@@ -1105,7 +1035,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "3gkg2a5da",
+                                    "id": "g4mlmcs5b",
                                     "original": "告訴，",
                                     "tokens": [
                                         {
@@ -1119,7 +1049,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "ykxd3e0nb",
+                                    "id": "q8ww3a6x8",
                                     "original": "愛人，",
                                     "tokens": [
                                         {
@@ -1133,7 +1063,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "sjmgxs3m5",
+                                    "id": "itbe4342b",
                                     "original": "太太，",
                                     "tokens": [
                                         {
@@ -1145,23 +1075,9 @@ export const VOCAB_COURSE: CoursePart[] = [
                                             "pinyin": ""
                                         }
                                     ]
-                                }
-                            ]
-                        }
-                    ]
-                }
-            },
-            {
-                "id": "unit-1-4-3",
-                "title": "4. Neutral Tone (輕聲詞) (Part 3)",
-                "content": {
-                    "title": "4. Neutral Tone (輕聲詞) (3)",
-                    "sections": [
-                        {
-                            "speaker": "Vocabulary Practice",
-                            "sentences": [
+                                },
                                 {
-                                    "id": "6jt23l8m7",
+                                    "id": "azh662gja",
                                     "original": "客氣，",
                                     "tokens": [
                                         {
@@ -1175,7 +1091,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "qgm9c6ay1",
+                                    "id": "6wv766ao6",
                                     "original": "地方，",
                                     "tokens": [
                                         {
@@ -1189,7 +1105,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "my159tqdw",
+                                    "id": "0e1umyipg",
                                     "original": "漂亮，",
                                     "tokens": [
                                         {
@@ -1203,7 +1119,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "ast6sufi1",
+                                    "id": "ox20jyjsu",
                                     "original": "意思，",
                                     "tokens": [
                                         {
@@ -1217,7 +1133,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "bapig3t8e",
+                                    "id": "pxsfyfm9b",
                                     "original": "喜歡，",
                                     "tokens": [
                                         {
@@ -1231,7 +1147,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "9y3tbo0fr",
+                                    "id": "awhr674pv",
                                     "original": "怎麼，",
                                     "tokens": [
                                         {
@@ -1245,7 +1161,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "moe0ol9ok",
+                                    "id": "aovtxw4ml",
                                     "original": "打算，",
                                     "tokens": [
                                         {
@@ -1259,7 +1175,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "ldtukx2vo",
+                                    "id": "7am4idoiw",
                                     "original": "打聽，",
                                     "tokens": [
                                         {
@@ -1273,7 +1189,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "jnyq6w7vk",
+                                    "id": "4r84cwyxh",
                                     "original": "我們，",
                                     "tokens": [
                                         {
@@ -1287,7 +1203,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "ef0vd3t9p",
+                                    "id": "zw696xc5f",
                                     "original": "你們，",
                                     "tokens": [
                                         {
@@ -1299,23 +1215,9 @@ export const VOCAB_COURSE: CoursePart[] = [
                                             "pinyin": ""
                                         }
                                     ]
-                                }
-                            ]
-                        }
-                    ]
-                }
-            },
-            {
-                "id": "unit-1-4-4",
-                "title": "4. Neutral Tone (輕聲詞) (Part 4)",
-                "content": {
-                    "title": "4. Neutral Tone (輕聲詞) (4)",
-                    "sections": [
-                        {
-                            "speaker": "Vocabulary Practice",
-                            "sentences": [
+                                },
                                 {
-                                    "id": "dme8c2ksv",
+                                    "id": "5eqz2bx45",
                                     "original": "他們，",
                                     "tokens": [
                                         {
@@ -1329,7 +1231,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "kg3ti6x96",
+                                    "id": "qflzo96sp",
                                     "original": "人們，",
                                     "tokens": [
                                         {
@@ -1354,16 +1256,16 @@ export const VOCAB_COURSE: CoursePart[] = [
         "title": "Part 2: Common Mistakes & Polyphones (易錯詞與多音字)",
         "chapters": [
             {
-                "id": "unit-2-1-1",
-                "title": "1. Polyphones (重點多音字) (Part 1)",
+                "id": "unit-2-1",
+                "title": "1. Polyphones (重點多音字)",
                 "content": {
-                    "title": "1. Polyphones (重點多音字) (1)",
+                    "title": "1. Polyphones (重點多音字)",
                     "sections": [
                         {
                             "speaker": "Vocabulary Practice",
                             "sentences": [
                                 {
-                                    "id": "p7ydfoi8c",
+                                    "id": "k7jzavgpl",
                                     "original": "處理，",
                                     "tokens": [
                                         {
@@ -1377,7 +1279,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "csuzy555b",
+                                    "id": "rw7agkqrv",
                                     "original": "因為，",
                                     "tokens": [
                                         {
@@ -1391,7 +1293,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "i8hz3u04s",
+                                    "id": "qdl4mlbxm",
                                     "original": "空餘，",
                                     "tokens": [
                                         {
@@ -1405,7 +1307,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "t81fta7w5",
+                                    "id": "44i45a9zf",
                                     "original": "幾場，",
                                     "tokens": [
                                         {
@@ -1419,7 +1321,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "g41hpl0m5",
+                                    "id": "7rfw6jcv7",
                                     "original": "即使，",
                                     "tokens": [
                                         {
@@ -1433,7 +1335,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "4kl7wp9pe",
+                                    "id": "8djssqib2",
                                     "original": "什麼，",
                                     "tokens": [
                                         {
@@ -1447,7 +1349,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "3jb2qxeke",
+                                    "id": "kral2cnfo",
                                     "original": "晚上，",
                                     "tokens": [
                                         {
@@ -1461,7 +1363,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "x70zdefpv",
+                                    "id": "zo9w4lo1d",
                                     "original": "這麼，",
                                     "tokens": [
                                         {
@@ -1475,7 +1377,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "4fz7fe9kd",
+                                    "id": "xksm8avru",
                                     "original": "朋友，",
                                     "tokens": [
                                         {
@@ -1489,7 +1391,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "usuxol167",
+                                    "id": "77pp987s5",
                                     "original": "氣氛，",
                                     "tokens": [
                                         {
@@ -1501,23 +1403,9 @@ export const VOCAB_COURSE: CoursePart[] = [
                                             "pinyin": ""
                                         }
                                     ]
-                                }
-                            ]
-                        }
-                    ]
-                }
-            },
-            {
-                "id": "unit-2-1-2",
-                "title": "1. Polyphones (重點多音字) (Part 2)",
-                "content": {
-                    "title": "1. Polyphones (重點多音字) (2)",
-                    "sections": [
-                        {
-                            "speaker": "Vocabulary Practice",
-                            "sentences": [
+                                },
                                 {
-                                    "id": "o4n90eafp",
+                                    "id": "xicvlvo6s",
                                     "original": "滂沱，",
                                     "tokens": [
                                         {
@@ -1531,7 +1419,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "i05901h8b",
+                                    "id": "02me078qg",
                                     "original": "負債累累，",
                                     "tokens": [
                                         {
@@ -1545,7 +1433,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "dy9p8kuav",
+                                    "id": "ywy64w4un",
                                     "original": "碩果累累，",
                                     "tokens": [
                                         {
@@ -1559,7 +1447,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "ct1t9vgd9",
+                                    "id": "m3i8ozwyi",
                                     "original": "複雜，",
                                     "tokens": [
                                         {
@@ -1573,7 +1461,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "15g3f6suj",
+                                    "id": "on73ssdgv",
                                     "original": "影片，",
                                     "tokens": [
                                         {
@@ -1587,7 +1475,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "riuw2th8b",
+                                    "id": "h071bldak",
                                     "original": "影片兒，",
                                     "tokens": [
                                         {
@@ -1601,7 +1489,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "24ps3ayw3",
+                                    "id": "wfi40e6en",
                                     "original": "血壓，",
                                     "tokens": [
                                         {
@@ -1615,7 +1503,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "la3wbau9f",
+                                    "id": "bw4prpkuf",
                                     "original": "鮮血，",
                                     "tokens": [
                                         {
@@ -1629,7 +1517,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "4krmsfsnm",
+                                    "id": "xr2sd4s1z",
                                     "original": "血液，",
                                     "tokens": [
                                         {
@@ -1643,7 +1531,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "nad62s9tt",
+                                    "id": "5cbd0iiok",
                                     "original": "一針見血，",
                                     "tokens": [
                                         {
@@ -1655,23 +1543,9 @@ export const VOCAB_COURSE: CoursePart[] = [
                                             "pinyin": ""
                                         }
                                     ]
-                                }
-                            ]
-                        }
-                    ]
-                }
-            },
-            {
-                "id": "unit-2-1-3",
-                "title": "1. Polyphones (重點多音字) (Part 3)",
-                "content": {
-                    "title": "1. Polyphones (重點多音字) (3)",
-                    "sections": [
-                        {
-                            "speaker": "Vocabulary Practice",
-                            "sentences": [
+                                },
                                 {
-                                    "id": "nr0vg63ob",
+                                    "id": "mbgticivd",
                                     "original": "暈血，",
                                     "tokens": [
                                         {
@@ -1685,7 +1559,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "etbd1gwnl",
+                                    "id": "yhjkv05ud",
                                     "original": "出血，",
                                     "tokens": [
                                         {
@@ -1699,7 +1573,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "qslnhg713",
+                                    "id": "7mwnpnx5w",
                                     "original": "血淋淋，",
                                     "tokens": [
                                         {
@@ -1718,16 +1592,16 @@ export const VOCAB_COURSE: CoursePart[] = [
                 }
             },
             {
-                "id": "unit-2-2-1",
-                "title": "2. Common Vocabulary (易錯詞彙表) (Part 1)",
+                "id": "unit-2-2",
+                "title": "2. Common Vocabulary (易錯詞彙表)",
                 "content": {
-                    "title": "2. Common Vocabulary (易錯詞彙表) (1)",
+                    "title": "2. Common Vocabulary (易錯詞彙表)",
                     "sections": [
                         {
                             "speaker": "Vocabulary Practice",
                             "sentences": [
                                 {
-                                    "id": "n6jvdm5rj",
+                                    "id": "664k2jb3q",
                                     "original": "祈禱，",
                                     "tokens": [
                                         {
@@ -1741,7 +1615,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "snriitpqg",
+                                    "id": "0p7999y1z",
                                     "original": "盡情，",
                                     "tokens": [
                                         {
@@ -1755,7 +1629,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "8zkctt75h",
+                                    "id": "b1otl8zh6",
                                     "original": "同鄉，",
                                     "tokens": [
                                         {
@@ -1769,7 +1643,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "i289jsq0z",
+                                    "id": "3vx8e62fg",
                                     "original": "便宜，",
                                     "tokens": [
                                         {
@@ -1783,7 +1657,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "tgqt08guu",
+                                    "id": "8wljie7kc",
                                     "original": "東西，",
                                     "tokens": [
                                         {
@@ -1797,7 +1671,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "1loqldibz",
+                                    "id": "biq5ibloj",
                                     "original": "刁難，",
                                     "tokens": [
                                         {
@@ -1811,7 +1685,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "g14kj93oe",
+                                    "id": "x2r7nz8aa",
                                     "original": "功夫，",
                                     "tokens": [
                                         {
@@ -1825,7 +1699,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "2tqgslziv",
+                                    "id": "hy1xibpw4",
                                     "original": "寧可，",
                                     "tokens": [
                                         {
@@ -1839,7 +1713,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "1eryi7wt1",
+                                    "id": "3p2q15kf2",
                                     "original": "輕舉妄動，",
                                     "tokens": [
                                         {
@@ -1853,7 +1727,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "62aqc0s99",
+                                    "id": "wooqphh0n",
                                     "original": "軟件，",
                                     "tokens": [
                                         {
@@ -1865,23 +1739,9 @@ export const VOCAB_COURSE: CoursePart[] = [
                                             "pinyin": ""
                                         }
                                     ]
-                                }
-                            ]
-                        }
-                    ]
-                }
-            },
-            {
-                "id": "unit-2-2-2",
-                "title": "2. Common Vocabulary (易錯詞彙表) (Part 2)",
-                "content": {
-                    "title": "2. Common Vocabulary (易錯詞彙表) (2)",
-                    "sections": [
-                        {
-                            "speaker": "Vocabulary Practice",
-                            "sentences": [
+                                },
                                 {
-                                    "id": "5q2pu0t06",
+                                    "id": "dqlvhwj7z",
                                     "original": "網絡，",
                                     "tokens": [
                                         {
@@ -1895,7 +1755,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "d0h9gpiyb",
+                                    "id": "bybidsjje",
                                     "original": "觸碰，",
                                     "tokens": [
                                         {
@@ -1909,7 +1769,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "hajilkd9f",
+                                    "id": "g0qa2rjn5",
                                     "original": "摁，",
                                     "tokens": [
                                         {
@@ -1923,7 +1783,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "tcdq4vf71",
+                                    "id": "daayui2vr",
                                     "original": "鍵盤，",
                                     "tokens": [
                                         {
@@ -1937,7 +1797,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "nrcwpccxq",
+                                    "id": "ne1fjh804",
                                     "original": "處理，",
                                     "tokens": [
                                         {
@@ -1951,7 +1811,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "dpi0s7eft",
+                                    "id": "e3030s00l",
                                     "original": "溝通，",
                                     "tokens": [
                                         {
@@ -1965,7 +1825,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "j3a8omzq5",
+                                    "id": "o4oc91nsv",
                                     "original": "檔案，",
                                     "tokens": [
                                         {
@@ -1979,7 +1839,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "68cb32pxh",
+                                    "id": "doltlcpi2",
                                     "original": "容易，",
                                     "tokens": [
                                         {
@@ -1993,7 +1853,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "b7slez3kw",
+                                    "id": "bud3jvqvn",
                                     "original": "會計師，",
                                     "tokens": [
                                         {
@@ -2007,7 +1867,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "lrsgheou4",
+                                    "id": "vsxyyqi85",
                                     "original": "連鎖，",
                                     "tokens": [
                                         {
@@ -2019,23 +1879,9 @@ export const VOCAB_COURSE: CoursePart[] = [
                                             "pinyin": ""
                                         }
                                     ]
-                                }
-                            ]
-                        }
-                    ]
-                }
-            },
-            {
-                "id": "unit-2-2-3",
-                "title": "2. Common Vocabulary (易錯詞彙表) (Part 3)",
-                "content": {
-                    "title": "2. Common Vocabulary (易錯詞彙表) (3)",
-                    "sections": [
-                        {
-                            "speaker": "Vocabulary Practice",
-                            "sentences": [
+                                },
                                 {
-                                    "id": "l0f7c1cc0",
+                                    "id": "0xa0zcs1c",
                                     "original": "行情，",
                                     "tokens": [
                                         {
@@ -2049,7 +1895,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "0rpkvcfwf",
+                                    "id": "pil8b1vm5",
                                     "original": "不在行，",
                                     "tokens": [
                                         {
@@ -2063,7 +1909,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "wus0ntjje",
+                                    "id": "vr13xgdhq",
                                     "original": "人行道，",
                                     "tokens": [
                                         {
@@ -2077,7 +1923,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "3uwi8cizw",
+                                    "id": "jprgulgxj",
                                     "original": "沒數，",
                                     "tokens": [
                                         {
@@ -2091,7 +1937,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "v8b8o9ni0",
+                                    "id": "o5n4jagdn",
                                     "original": "數以億計，",
                                     "tokens": [
                                         {
@@ -2105,7 +1951,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "pmwyji7mn",
+                                    "id": "s4sk7scko",
                                     "original": "通脹，",
                                     "tokens": [
                                         {
@@ -2119,7 +1965,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "w3fpfz203",
+                                    "id": "kcbrgazt9",
                                     "original": "志願，",
                                     "tokens": [
                                         {
@@ -2133,7 +1979,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "bthsynh06",
+                                    "id": "0xfgql7rl",
                                     "original": "經營，",
                                     "tokens": [
                                         {
@@ -2147,7 +1993,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "6nn9mejsh",
+                                    "id": "ud2df0bmy",
                                     "original": "產品，",
                                     "tokens": [
                                         {
@@ -2161,7 +2007,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "btusis7sm",
+                                    "id": "4c53lk812",
                                     "original": "基礎，",
                                     "tokens": [
                                         {
@@ -2173,23 +2019,9 @@ export const VOCAB_COURSE: CoursePart[] = [
                                             "pinyin": ""
                                         }
                                     ]
-                                }
-                            ]
-                        }
-                    ]
-                }
-            },
-            {
-                "id": "unit-2-2-4",
-                "title": "2. Common Vocabulary (易錯詞彙表) (Part 4)",
-                "content": {
-                    "title": "2. Common Vocabulary (易錯詞彙表) (4)",
-                    "sections": [
-                        {
-                            "speaker": "Vocabulary Practice",
-                            "sentences": [
+                                },
                                 {
-                                    "id": "ilii8wj4l",
+                                    "id": "cc5j5m0n3",
                                     "original": "長久，",
                                     "tokens": [
                                         {
@@ -2203,7 +2035,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "ermvunp38",
+                                    "id": "0t4quc5s3",
                                     "original": "粗糙，",
                                     "tokens": [
                                         {
@@ -2217,7 +2049,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "5lfm77a6c",
+                                    "id": "6cq7mynxd",
                                     "original": "言傳身教，",
                                     "tokens": [
                                         {
@@ -2231,7 +2063,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "8ul9kwmne",
+                                    "id": "yhbvuzndc",
                                     "original": "存儲，",
                                     "tokens": [
                                         {
@@ -2245,7 +2077,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "zlo3tx1kc",
+                                    "id": "0psj2oaaw",
                                     "original": "財富，",
                                     "tokens": [
                                         {
@@ -2259,7 +2091,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "ub8jwptf1",
+                                    "id": "qkyb2d2gj",
                                     "original": "操作，",
                                     "tokens": [
                                         {
@@ -2273,7 +2105,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "c1fugyopy",
+                                    "id": "mtqfrtv9t",
                                     "original": "準備，",
                                     "tokens": [
                                         {
@@ -2287,7 +2119,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "yive18vcw",
+                                    "id": "upg3f0uqx",
                                     "original": "準確，",
                                     "tokens": [
                                         {
@@ -2301,7 +2133,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "nep8ekqjx",
+                                    "id": "lpuwfw7iv",
                                     "original": "資料，",
                                     "tokens": [
                                         {
@@ -2315,7 +2147,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "oi1nb5a22",
+                                    "id": "7hmj0es0a",
                                     "original": "資訊，",
                                     "tokens": [
                                         {
@@ -2327,23 +2159,9 @@ export const VOCAB_COURSE: CoursePart[] = [
                                             "pinyin": ""
                                         }
                                     ]
-                                }
-                            ]
-                        }
-                    ]
-                }
-            },
-            {
-                "id": "unit-2-2-5",
-                "title": "2. Common Vocabulary (易錯詞彙表) (Part 5)",
-                "content": {
-                    "title": "2. Common Vocabulary (易錯詞彙表) (5)",
-                    "sections": [
-                        {
-                            "speaker": "Vocabulary Practice",
-                            "sentences": [
+                                },
                                 {
-                                    "id": "sgfvem5es",
+                                    "id": "b98ncmch1",
                                     "original": "投資，",
                                     "tokens": [
                                         {
@@ -2357,7 +2175,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "ki0wzg576",
+                                    "id": "y4vbsjz5c",
                                     "original": "資格，",
                                     "tokens": [
                                         {
@@ -2371,7 +2189,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "en23gfavj",
+                                    "id": "3v13yxq6d",
                                     "original": "總是，",
                                     "tokens": [
                                         {
@@ -2385,7 +2203,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "bqlwo78lr",
+                                    "id": "iwo2n1ict",
                                     "original": "總之，",
                                     "tokens": [
                                         {
@@ -2399,7 +2217,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "yivnpp1jb",
+                                    "id": "gefh8b32c",
                                     "original": "種類，",
                                     "tokens": [
                                         {
@@ -2413,7 +2231,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "611ck4vji",
+                                    "id": "cstzjmr4b",
                                     "original": "質量，",
                                     "tokens": [
                                         {
@@ -2427,7 +2245,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "m2b2wy2ov",
+                                    "id": "hznnk7n2m",
                                     "original": "註冊，",
                                     "tokens": [
                                         {
@@ -2441,7 +2259,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "a2jdpyy3w",
+                                    "id": "0jvl337tb",
                                     "original": "雜誌社，",
                                     "tokens": [
                                         {
@@ -2455,7 +2273,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "11qcixana",
+                                    "id": "dp3xm4reo",
                                     "original": "紮實，",
                                     "tokens": [
                                         {
@@ -2469,7 +2287,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "s5tu1rjpq",
+                                    "id": "b3sgtj0cu",
                                     "original": "積累，",
                                     "tokens": [
                                         {
@@ -2481,23 +2299,9 @@ export const VOCAB_COURSE: CoursePart[] = [
                                             "pinyin": ""
                                         }
                                     ]
-                                }
-                            ]
-                        }
-                    ]
-                }
-            },
-            {
-                "id": "unit-2-2-6",
-                "title": "2. Common Vocabulary (易錯詞彙表) (Part 6)",
-                "content": {
-                    "title": "2. Common Vocabulary (易錯詞彙表) (6)",
-                    "sections": [
-                        {
-                            "speaker": "Vocabulary Practice",
-                            "sentences": [
+                                },
                                 {
-                                    "id": "ekxwgc7br",
+                                    "id": "n8qwelq1r",
                                     "original": "積分，",
                                     "tokens": [
                                         {
@@ -2511,7 +2315,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "xi0vxjoin",
+                                    "id": "1qf10o0g0",
                                     "original": "成績，",
                                     "tokens": [
                                         {
@@ -2525,7 +2329,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "3lfii735e",
+                                    "id": "kwdem1blm",
                                     "original": "執行，",
                                     "tokens": [
                                         {
@@ -2539,7 +2343,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "izxqth1ew",
+                                    "id": "5np6owi9h",
                                     "original": "計劃，",
                                     "tokens": [
                                         {
@@ -2553,7 +2357,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "hsk0akj9i",
+                                    "id": "utnr3oduz",
                                     "original": "增加，",
                                     "tokens": [
                                         {
@@ -2567,7 +2371,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "7tgertqy8",
+                                    "id": "0ayptcnqn",
                                     "original": "專業知識，",
                                     "tokens": [
                                         {
@@ -2581,7 +2385,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "gifkqv9o3",
+                                    "id": "4o6r1dp4a",
                                     "original": "賺錢，",
                                     "tokens": [
                                         {
@@ -2595,7 +2399,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "1r8y436fu",
+                                    "id": "dyc54pizd",
                                     "original": "守著，",
                                     "tokens": [
                                         {
@@ -2609,7 +2413,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "2rs6qlmrq",
+                                    "id": "nwx17iujx",
                                     "original": "理所當然，",
                                     "tokens": [
                                         {
@@ -2623,7 +2427,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "q8mipqvf0",
+                                    "id": "r4n7lht3d",
                                     "original": "模式，",
                                     "tokens": [
                                         {
@@ -2635,23 +2439,9 @@ export const VOCAB_COURSE: CoursePart[] = [
                                             "pinyin": ""
                                         }
                                     ]
-                                }
-                            ]
-                        }
-                    ]
-                }
-            },
-            {
-                "id": "unit-2-2-7",
-                "title": "2. Common Vocabulary (易錯詞彙表) (Part 7)",
-                "content": {
-                    "title": "2. Common Vocabulary (易錯詞彙表) (7)",
-                    "sections": [
-                        {
-                            "speaker": "Vocabulary Practice",
-                            "sentences": [
+                                },
                                 {
-                                    "id": "npwsscd5n",
+                                    "id": "8i5ll0rcn",
                                     "original": "減省，",
                                     "tokens": [
                                         {
@@ -2665,7 +2455,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "vjidli69h",
+                                    "id": "57syot6zh",
                                     "original": "周詳，",
                                     "tokens": [
                                         {
@@ -2679,7 +2469,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "4spzr85g3",
+                                    "id": "lw525dweq",
                                     "original": "省市，",
                                     "tokens": [
                                         {
@@ -2693,7 +2483,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "nf8yogw56",
+                                    "id": "2hs4km4tl",
                                     "original": "喪失，",
                                     "tokens": [
                                         {
@@ -2707,7 +2497,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "erm122yfw",
+                                    "id": "8ueik69jg",
                                     "original": "住宿費，",
                                     "tokens": [
                                         {
@@ -2721,7 +2511,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "rtrtq7msr",
+                                    "id": "i4h5a3f7c",
                                     "original": "公司，",
                                     "tokens": [
                                         {
@@ -2735,7 +2525,7 @@ export const VOCAB_COURSE: CoursePart[] = [
                                     ]
                                 },
                                 {
-                                    "id": "vcnqhdbgz",
+                                    "id": "940svmlmm",
                                     "original": "創業，",
                                     "tokens": [
                                         {

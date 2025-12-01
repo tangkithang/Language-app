@@ -19,6 +19,7 @@ export default function App() {
   // Navigation State
   const [mode, setMode] = useState<AppMode>('HOME');
   const [activeChapter, setActiveChapter] = useState<Chapter | null>(null);
+  const [initialPageIndex, setInitialPageIndex] = useState(1);
 
   // Global Settings State
   const [showSettings, setShowSettings] = useState(false);
@@ -308,6 +309,7 @@ export default function App() {
                     hasNextChapter={!!getAdjacentChapter(1)}
                     nextChapterTitle={getAdjacentChapter(1)?.title}
                     previousChapterTitle={getAdjacentChapter(-1)?.title}
+                    pageIndex={initialPageIndex}
                   />
                 );
               })()}
@@ -325,7 +327,20 @@ export default function App() {
         );
       }
       return <VocabularyMenu
-        onSelectChapter={handleSelectChapter}
+        onSelectChapter={(chapter: Chapter, pageIndex?: number) => {
+          handleSelectChapter(chapter);
+          // If a page index is provided (1-based), we need to pass it to the Reader.
+          // We can store it in a temporary state or pass it via activeChapter if we extend the type,
+          // but simpler is to just use a new state variable for initial page.
+          if (pageIndex) {
+            // We'll add a new state for this: const [initialPageIndex, setInitialPageIndex] = useState(1);
+            // But for now, let's just hack it by modifying the activeChapter state or adding a new one.
+            // Let's add `initialPageIndex` state to App.
+            setInitialPageIndex(pageIndex);
+          } else {
+            setInitialPageIndex(1);
+          }
+        }}
         onBack={() => setMode('HOME')}
         scores={chapterScores}
       />;
